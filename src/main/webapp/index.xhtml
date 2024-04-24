@@ -8,13 +8,26 @@
 <h:head>
     <title>Home</title>
     <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet"/>
+    <link href="styles/main.css" rel="stylesheet" type="text/css" media="all" />
 </h:head>
 <h:body>
-    <h3>Lista de Películas</h3>
-    <ul>
-        <ui:repeat value="#{festival.festivales}" var="festival">
-            <li>#{festival.festival} - #{festival.fundacion}</li>
-        </ui:repeat>
-    </ul>
+    <div class="hero is-info">
+        <div class="hero-body">
+            <p class="title">Info hero</p>
+            <p class="subtitle">Info subtitle</p>
+        </div>
+    </div>
+    <div class="container is-flex is-flex-direction-column is-justify-content-center is-align-items-center mb-4 mt-4">
+        <div class="card">
+            <p:dataTable var="fes" value="#{festival.festivales}">
+                <p:column headerText="Festival">
+                    <h:outputText value="#{fes.festival}" />
+                </p:column>
+                <p:column headerText="Fundacion">
+                    <h:outputText value="#{fes.fundacion}" />
+                </p:column>
+            </p:dataTable>
+        </div>
+    </div>
 </h:body>
 </html>
