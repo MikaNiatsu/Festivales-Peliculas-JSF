@@ -4,30 +4,79 @@
 <html lang="es" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
     <title>Home</title>
-    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
     <link href="styles/main.css" rel="stylesheet" type="text/css" media="all" />
 </h:head>
 <h:body>
     <div class="hero is-info">
         <div class="hero-body">
-            <p class="title">Info hero</p>
-            <p class="subtitle">Info subtitle</p>
+            <p class="title">Festivales</p>
         </div>
     </div>
+    <h:form>
     <div class="container is-flex is-flex-direction-column is-justify-content-center is-align-items-center mb-4 mt-4">
+        <h:panelGroup class="card is-justify-content-center" id="botones" rendered="#{not festival.esAccion}">
+            <div class="card-content" >
+                <div class="columns is-justify-content-center">
+                    <div class="column">
+                        <p:commandButton value="Crear" actionListener="#{festival.crear}" rendered="#{not festival.esAccion}" immediate="true" update="@form" styleClass="ui-button-secondary" />
+                    </div>
+                    <div class="column">
+                        <p:commandButton value="Editar" actionListener="#{festival.editar}" rendered="#{not festival.esAccion}" immediate="true" update="@form" styleClass="ui-button-warning" />
+                    </div>
+                    <div class="column">
+                        <p:commandButton value="Eliminar" actionListener="#{festival.eliminar}" rendered="#{not festival.esAccion}" immediate="true" update="@form" styleClass="ui-button-danger" />
+                    </div>
+                </div>
+            </div>
+        </h:panelGroup>
         <div class="card">
-            <p:dataTable var="fes" value="#{festival.festivales}">
-                <p:column headerText="Festival">
-                    <h:outputText value="#{fes.festival}" />
-                </p:column>
-                <p:column headerText="Fundacion">
-                    <h:outputText value="#{fes.fundacion}" />
-                </p:column>
-            </p:dataTable>
+            <div class="card-content">
+                    <p:dataTable id ="tablaFestivales" var="fes" value="#{festival.festivales}" scrollable="true" scrollHeight="250">
+                        <p:column headerText="¿Eliminar?" rendered="#{festival.esEliminar}">
+                            <p:selectBooleanCheckbox>
+                                <p:ajax listener="#{festival.toggleSelected(fes)}" />
+                            </p:selectBooleanCheckbox>
+                        </p:column>
+                        <p:column headerText="Festival">
+                            <h:outputText value="#{fes.festival}" styleClass="content"/>
+                        </p:column>
+                        <p:column headerText="Fundacion">
+                            <h:outputText value="#{fes.fundacion}" rendered="#{not festival.esEditable}" styleClass="content"/>
+                            <p:inputMask id="date" value="#{fes.fundacion}" mask="9999-99-99" rendered="#{festival.esEditable}" styleClass="input" converter="localDateConverter">
+                                <p:ajax event="change" listener="#{festival.actualizar_festival(fes)}" process="@this" update="@form" />
+                            </p:inputMask>
+                        </p:column>
+                    </p:dataTable>
+            </div>
+        </div>
+        <h:panelGroup class="card is-justify-content-center" rendered="#{festival.esAccion}">
+            <div class="card-content is-justify-content-center">
+                <p:commandButton value="Terminar" actionListener="#{festival.guardar_editado}" immediate="true" update="@form" styleClass="ui-button-success" rendered="#{festival.esEditable}"/>
+                <div class="columns is-justify-content-center">
+                    <div class="column">
+                        <p:commandButton value="Confirmar" actionListener="#{festival.confirmar_eliminar}" immediate="true" update="@form" styleClass="ui-button-success" rendered="#{festival.esEliminar}"/>
+                    </div>
+                    <div class="column">
+                        <p:commandButton value="Cancelar" actionListener="#{festival.cancelar_eliminar}" immediate="true" update="@form" styleClass="ui-button-danger" rendered="#{festival.esEliminar}" />
+                    </div>
+                </div>
+            </div>
+        </h:panelGroup>
+
+    </div>
+    </h:form>
+    <div class="footer">
+        <div class="content has-text-centered">
+            <p>
+                Universidad el Bosque Copyright &copy; 2024
+            </p>
         </div>
     </div>
+
 </h:body>
 </html>

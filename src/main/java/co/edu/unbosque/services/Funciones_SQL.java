@@ -44,4 +44,16 @@ public class Funciones_SQL {
         }
         return null;
     }
+    public static void llamar_metodo(String sql) throws SQLException {
+        conexion();
+        try {
+            Statement cs = con.createStatement();
+            cs.executeUpdate(sql);
+        } catch (Exception e) {
+            System.err.println("Error al ejecutar la consulta");
+            e.printStackTrace();
+        } finally {
+            con.close();
+        }
+    }
 }
