@@ -3,6 +3,7 @@ package co.edu.unbosque.beans;
 import co.edu.unbosque.persistence.Festival;
 import co.edu.unbosque.services.Funciones_SQL;
 import co.edu.unbosque.services.LocalDateAdapter;
+import co.edu.unbosque.services.LocalDateConverter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -14,6 +15,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ActionListener;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import jakarta.validation.constraints.Past;
 import org.primefaces.event.RowEditEvent;
 
 import java.io.IOException;
@@ -21,6 +23,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +35,8 @@ public class Festival_Bean implements Serializable {
     private boolean esEditable = false;
     private boolean esEliminar = false;
     private boolean esAccion = false;
+    private String nombre = "";
+    private String fecha = "";
     private List<Festival> festivalesSeleccionados = new ArrayList<>();
     @PostConstruct
     public void init() {
@@ -95,7 +100,25 @@ public class Festival_Bean implements Serializable {
         }
     }
     public void crear(){
+        try {
+            if(nombre == null || nombre.isEmpty()){
+                FacesContext.getCurrentInstance().addMessage("nombre", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "Nombre inválido"));
+                return;
+            }
+            if(fecha == null || fecha.isEmpty()){
+                FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "Fecha inválida"));
+                return;
+            }
+            LocalDate parsedDate = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
+
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "Fecha inválida"));
+            return;
+        }
+
+        System.out.println(nombre + " " + fecha);
+        refrescar_pagina();
     }
     public void eliminar(){
         esAccion = true;
@@ -143,5 +166,22 @@ public class Festival_Bean implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }

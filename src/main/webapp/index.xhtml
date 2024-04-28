@@ -8,7 +8,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
     <title>Home</title>
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
     <link href="styles/main.css" rel="stylesheet" type="text/css" media="all" />
 </h:head>
 <h:body>
@@ -18,12 +18,23 @@
         </div>
     </div>
     <h:form>
+        <p:growl id="growl" showDetail="true" showSummary="true" /> 
+
+        <p:dialog  global="true" widgetVar="dialog" header="Crear Festival"  modal="true" showEffect="fade" hideEffect="fade" resizable="false" draggable="false">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Festival" for="festival"/>
+                <p:inputText id="festival" value="#{festival.nombre}"/>
+                <p:outputLabel value="Fundacion" for="fundacion"/>
+                <p:inputMask id="fundacion" value="#{festival.fecha}" mask="9999-99-99" />
+                <p:commandButton value="Guardar" actionListener="#{festival.crear}" update="@form" styleClass="ui-button-success"/>
+            </h:panelGrid>
+        </p:dialog>
     <div class="container is-flex is-flex-direction-column is-justify-content-center is-align-items-center mb-4 mt-4">
         <h:panelGroup class="card is-justify-content-center" id="botones" rendered="#{not festival.esAccion}">
             <div class="card-content" >
                 <div class="columns is-justify-content-center">
                     <div class="column">
-                        <p:commandButton value="Crear" actionListener="#{festival.crear}" rendered="#{not festival.esAccion}" immediate="true" update="@form" styleClass="ui-button-secondary" />
+                        <p:commandButton value="Crear" oncomplete="PF('dialog').show()" update="@form" rendered="#{not festival.esAccion}" styleClass="ui-button-secondary" />
                     </div>
                     <div class="column">
                         <p:commandButton value="Editar" actionListener="#{festival.editar}" rendered="#{not festival.esAccion}" immediate="true" update="@form" styleClass="ui-button-warning" />
@@ -38,9 +49,9 @@
             <div class="card-content">
                     <p:dataTable id ="tablaFestivales" var="fes" value="#{festival.festivales}" scrollable="true" scrollHeight="250">
                         <p:column headerText="¿Eliminar?" rendered="#{festival.esEliminar}">
-                            <p:selectBooleanCheckbox>
+                            <p:toggleSwitch >
                                 <p:ajax listener="#{festival.toggleSelected(fes)}" />
-                            </p:selectBooleanCheckbox>
+                            </p:toggleSwitch >
                         </p:column>
                         <p:column headerText="Festival">
                             <h:outputText value="#{fes.festival}" styleClass="content"/>
