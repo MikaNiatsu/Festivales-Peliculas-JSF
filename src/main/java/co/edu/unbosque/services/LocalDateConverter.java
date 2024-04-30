@@ -1,5 +1,6 @@
 package co.edu.unbosque.services;
 
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
@@ -16,21 +17,29 @@ public class LocalDateConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value == null || value.isEmpty()) {
-            return null;
+            FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Fecha inválida poniendo fecha temporal a 1999-01-01"));
+            return LocalDate.parse("1999-01-01", formatter);
         }
         try {
             return LocalDate.parse(value, formatter);
-        }catch (Exception e) {
-            return null;
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Fecha inválida poniendo fecha temporal a 1999-01-01"));
+            return LocalDate.parse("1999-01-01", formatter);
         }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         if (value == null) {
-            return "";
+            FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Fecha inválida poniendo fecha temporal a 1999-01-01"));
+            return "1999-01-01";
         }
-        return ((LocalDate) value).format(formatter);
+        try {
+            return ((LocalDate) value).format(formatter);
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Fecha inválida poniendo fecha temporal a 1999-01-01"));
+            return "1999-01-01";
+        }
     }
 
 }

@@ -1,10 +1,6 @@
 package co.edu.unbosque.services;
 
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import jakarta.ejb.Singleton;
-import jakarta.ejb.Startup;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,6 +22,7 @@ public class Funciones_SQL {
             e.printStackTrace();
         }
     }
+
     public static String llamar_metodo_json(String sql) throws SQLException {
         conexion();
         try {
@@ -44,6 +41,7 @@ public class Funciones_SQL {
         }
         return null;
     }
+
     public static void llamar_metodo(String sql) throws SQLException {
         conexion();
         try {
