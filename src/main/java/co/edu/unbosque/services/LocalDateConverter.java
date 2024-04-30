@@ -18,7 +18,11 @@ public class LocalDateConverter implements Converter {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        return LocalDate.parse(value, formatter);
+        try {
+            return LocalDate.parse(value, formatter);
+        }catch (Exception e) {
+            return null;
+        }
     }
 
     @Override

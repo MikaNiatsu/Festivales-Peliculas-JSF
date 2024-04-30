@@ -58,7 +58,7 @@
                         </p:column>
                         <p:column headerText="Fundacion">
                             <h:outputText value="#{fes.fundacion}" rendered="#{not festival.esEditable}" styleClass="content"/>
-                            <p:inputMask id="date" value="#{fes.fundacion}" mask="9999-99-99" rendered="#{festival.esEditable}" styleClass="input" converter="localDateConverter">
+                            <p:inputMask id="date" value="#{fes.fundacion}" mask="9999-99-99" rendered="#{festival.esEditable}" styleClass="input" converter="localDateConverter" >
                                 <p:ajax event="change" listener="#{festival.actualizar_festival(fes)}" process="@this" update="@form" />
                             </p:inputMask>
                         </p:column>

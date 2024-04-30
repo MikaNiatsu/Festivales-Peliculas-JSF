@@ -110,8 +110,9 @@ public class Festival_Bean implements Serializable {
                 return;
             }
             LocalDate parsedDate = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-
+            Funciones_SQL.llamar_metodo(String.format("CALL crear_festival('%s', '%s');", nombre, fecha));
+            nombre = "";
+            fecha = "";
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "Fecha inválida"));
             return;
@@ -135,11 +136,25 @@ public class Festival_Bean implements Serializable {
     }
     public void actualizar_festival(Festival fes) {
         try {
+            if(fes.getFundacion() == null) {
+                fes.setFundacion(obtener_festival_anterior(fes.getFestival()));
+                FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "Fecha inválida"));
+                return;
+            }
             Funciones_SQL.llamar_metodo(String.format("CALL actualizar_festival('%s','%s');", fes.getFestival(), fes.getFundacion()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public LocalDate obtener_festival_anterior(String festival) {
+        for (Festival f : festivales) {
+            if(f.getFestival().equals(festival)) {
+                return f.getFundacion();
+            }
+        }
+        return null;
     }
 
     public void confirmar_eliminar() {
