@@ -1,7 +1,7 @@
 package co.edu.unbosque.persistence;
 
 public class Pelicula {
-    private int cip;
+    private String cip;
     private String titulo_p;
     private int ano_produccion;
     private String titulo_s;
@@ -9,7 +9,7 @@ public class Pelicula {
     private int presupuesto;
     private int duracion;
 
-    public Pelicula(int cip, String titulo_p, int ano_produccion, String titulo_s, String nacionalidad, int presupuesto, int duracion) {
+    public Pelicula(String cip, String titulo_p, int ano_produccion, String titulo_s, String nacionalidad, int presupuesto, int duracion) {
         this.cip = cip;
         this.titulo_p = titulo_p;
         this.ano_produccion = ano_produccion;
@@ -19,11 +19,11 @@ public class Pelicula {
         this.duracion = duracion;
     }
 
-    public int getCip() {
+    public String getCip() {
         return cip;
     }
 
-    public void setCip(int cip) {
+    public void setCip(String cip) {
         this.cip = cip;
     }
 

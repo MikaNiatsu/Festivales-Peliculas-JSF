@@ -150,7 +150,6 @@ public class Festival_Bean implements Serializable {
     public void actualizar_festival(Festival fes) {
         try {
             if (fes.getFundacion() == null) {
-                fes.setFundacion(obtener_festival_anterior(fes.getFestival()));
                 FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Fecha inválida"));
                 return;
             }
@@ -159,15 +158,6 @@ public class Festival_Bean implements Serializable {
             e.printStackTrace();
         }
 
-    }
-
-    public LocalDate obtener_festival_anterior(String festival) {
-        for (Festival f : festivales) {
-            if (f.getFestival().equals(festival)) {
-                return f.getFundacion();
-            }
-        }
-        return null;
     }
 
     public void confirmar_eliminar() {
@@ -192,13 +182,13 @@ public class Festival_Bean implements Serializable {
     public void refrescar_pagina() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         try {
-            externalContext.redirect(externalContext.getRequestContextPath() + "/index.xhtml");
+            externalContext.redirect(externalContext.getRequestContextPath() + "/festival.xhtml");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static byte[] generar_pdf(List<Festival> festivales) {
+    public byte[] generar_pdf(List<Festival> festivales) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Document document = new Document(PageSize.A4.rotate());
 
@@ -221,7 +211,7 @@ public class Festival_Bean implements Serializable {
         return outputStream.toByteArray();
     }
 
-    public static void header(PdfPTable table) {
+    public void header(PdfPTable table) {
         String[] headers = {"Festival", "Fundación"};
         Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
         font.setColor(BaseColor.WHITE);
@@ -235,7 +225,7 @@ public class Festival_Bean implements Serializable {
         }
     }
 
-    public static void agregar_rows(PdfPTable table, Festival f) {
+    public void agregar_rows(PdfPTable table, Festival f) {
         table.addCell(f.getFestival());
         table.addCell(f.getFundacion().toString());
     }
