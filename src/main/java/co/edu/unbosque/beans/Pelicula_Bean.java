@@ -1,6 +1,7 @@
 package co.edu.unbosque.beans;
 
 import co.edu.unbosque.persistence.Pelicula;
+import co.edu.unbosque.persistence.Posters;
 import co.edu.unbosque.services.Descargador;
 import co.edu.unbosque.services.Funciones_SQL;
 import com.google.gson.Gson;
@@ -24,6 +25,7 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Named("pelicula")
 @ViewScoped
@@ -38,6 +40,16 @@ public class Pelicula_Bean implements Serializable {
     private String nacionalidad;
     private int presupuesto;
     private int duracion;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    private String url;
 
     public String getTitulo_p() {
         return titulo_p;
@@ -144,6 +156,46 @@ public class Pelicula_Bean implements Serializable {
         this.peliculasSeleccionadas = peliculasSeleccionadas;
     }
 
+    public void crear() {
+        try {
+            if (titulo_p == null || titulo_p.isEmpty() || titulo_p.length() > 44) {
+                FacesContext.getCurrentInstance().addMessage("titulo", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Titulo inválido"));
+                return;
+            }
+            if (ano_produccion <= 0 || (ano_produccion + "").length() > 4) {
+                FacesContext.getCurrentInstance().addMessage("ano_produccion", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ano inválido"));
+                return;
+            }
+            if (titulo_s == null || titulo_s.isEmpty() || titulo_s.length() > 44) {
+                FacesContext.getCurrentInstance().addMessage("titulo_s", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Titulo inválido"));
+                return;
+            }
+            if (nacionalidad == null || nacionalidad.isEmpty() || nacionalidad.length() > 14) {
+                FacesContext.getCurrentInstance().addMessage("nacionalidad", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nacionalidad inválida"));
+                return;
+            }
+            if (presupuesto <= 0 || (presupuesto + "").length() > 10) {
+                FacesContext.getCurrentInstance().addMessage("presupuesto", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Presupuesto inválido"));
+                return;
+            }
+            if (duracion <= 0 || (duracion + "").length() > 3) {
+                FacesContext.getCurrentInstance().addMessage("duracion", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Duración inválida"));
+                return;
+            }
+            String cip = (Integer.parseInt(Objects.requireNonNull(Funciones_SQL.llamar_metodo_json("CALL id_alto_pelicula();"))) + 1) + "";
+            Funciones_SQL.llamar_metodo(String.format("CALL crear_pelicula('%s','%s', %s, '%s', '%s', %s, %s);", cip, titulo_p.replace("'", " "), ano_produccion, titulo_s.replace("'", " "), nacionalidad, presupuesto, duracion));
+            if (!url.isEmpty() && !url.equals(" "))
+                Posters.agregar(cip, url);
+            refrescar_pagina();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String obtener_poster(String id) {
+        return Posters.obtener_poster(id);
+    }
+
     public void toggleSelected(Pelicula pel) {
         if (peliculasSeleccionadas.contains(pel)) {
             peliculasSeleccionadas.remove(pel);
@@ -204,7 +256,6 @@ public class Pelicula_Bean implements Serializable {
                 return;
             }
             Funciones_SQL.llamar_metodo(String.format("CALL actualizar_pelicula('%s','%s', '%s', '%s', '%s', '%s', '%s');", pel.getCip(), pel.getTitulo_p(), pel.getAno_produccion() + "", pel.getTitulo_s(), pel.getNacionalidad(), pel.getPresupuesto() + "", pel.getDuracion() + ""));
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", "Pelicula actualizada correctamente" + pel.getCip()));
         } catch (SQLException e) {
             e.printStackTrace();
         }

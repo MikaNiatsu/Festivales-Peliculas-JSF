@@ -38,15 +38,20 @@
                     </input>
                 </div>
                 <div>
-                    <div class="columns">
-                        <div class="column">
-                            <p:commandButton value="Buscar" styleClass="ui-button-secondary mt-4 mb-2"
-                                             icon="pi pi-search" immediate="true" onclick="api()" update="@this"/>
-                        </div>
-                        <div class="column">
-                            <p:commandButton value="Instrucciones" styleClass="ui-button-help mt-4 mb-2"
-                                             icon="pi pi-info-circle"
-                                             onclick="PF('imagen').show()"/>
+                    <div class="field is-grouped is-justify-content-center is-align-items-center">
+                        <div class="control is-justify-content-center is-align-items-center">
+                            <div class="columns">
+                                <div class="column">
+                                    <p:commandButton value="Buscar" styleClass="ui-button-secondary mt-4 mb-2"
+                                                     icon="pi pi-search" immediate="true" onclick="api()"
+                                                     update="@this"/>
+                                </div>
+                                <div class="column">
+                                    <p:commandButton value="Instrucciones" styleClass="ui-button-help mt-4 mb-2"
+                                                     icon="pi pi-info-circle"
+                                                     onclick="PF('imagen').show()"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -115,12 +120,13 @@
                         <p:inputText id="duracion" widgetVar="duracion" value="#{pelicula.duracion}"
                                      placeholder="Duración"
                                      styleClass="input" type="number"/>
+                        <p:inputText id="url" widgetVar="url" value="#{pelicula.url}" styleClass="is-hidden"/>
                     </div>
                 </div>
 
                 <div class="field is-grouped is-justify-content-center is-align-items-center">
                     <div class="control is-justify-content-center is-align-items-center">
-                        <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{festival.crear}"
+                        <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{pelicula.crear}"
                                          update="@form"
                                          styleClass="ui-button-success"/>
                     </div>
@@ -224,7 +230,7 @@
                             <p:dialog header="#{pel.titulo_p}" widgetVar="#{pel.titulo_p}" modal="true"
                                       draggable="false" resizable="false" showEffect="fade" hideEffect="fade">
                                 <p:graphicImage
-                                        value="https://m.media-amazon.com/images/M/MV5BODRmZDVmNzUtZDA4ZC00NjhkLWI2M2UtN2M0ZDIzNDcxYThjL2ltYWdlXkEyXkFqcGdeQXVyNTk0MzMzODA@._V1_SX300.jpg"
+                                        value="#{pelicula.obtener_poster(pel.cip)}"
                                         width="100%"/>
                             </p:dialog>
                         </p:column>
@@ -305,7 +311,10 @@
                             PF('nacionalidad').jq.val((data.Country + "").split(',')[0] ?? "");
                         }
                         if (data.Runtime !== "N/A") {
-                            PF('duracion').jq.val(data.Runtime);
+                            PF('duracion').jq.val(Number((data.Runtime + "").split(' min')[0]));
+                        }
+                        if (data.Poster !== "N/A") {
+                            PF('url').jq.val(data.Poster);
                         }
                     })
                     .catch(error => console.error('Error al obtener los datos:', error));
