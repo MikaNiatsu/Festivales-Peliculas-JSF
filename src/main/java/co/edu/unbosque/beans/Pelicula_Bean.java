@@ -1,7 +1,6 @@
 package co.edu.unbosque.beans;
-
 import co.edu.unbosque.persistence.Pelicula;
-import co.edu.unbosque.persistence.Posters;
+import co.edu.unbosque.services.Posters;
 import co.edu.unbosque.services.Descargador;
 import co.edu.unbosque.services.Funciones_SQL;
 import com.google.gson.Gson;
@@ -26,6 +25,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 
 @Named("pelicula")
 @ViewScoped
@@ -183,7 +183,10 @@ public class Pelicula_Bean implements Serializable {
                 return;
             }
             String cip = (Integer.parseInt(Objects.requireNonNull(Funciones_SQL.llamar_metodo_json("CALL id_alto_pelicula();"))) + 1) + "";
-            Funciones_SQL.llamar_metodo(String.format("CALL crear_pelicula('%s','%s', %s, '%s', '%s', %s, %s);", cip, titulo_p.replace("'", " "), ano_produccion, titulo_s.replace("'", " "), nacionalidad, presupuesto, duracion));
+            titulo_p = titulo_p.replace("'", "''").replace("\"", "''");
+            titulo_s = titulo_s.replace("'", "''").replace("\"", "''");
+            nacionalidad = nacionalidad.replace("'", "''").replace("\"", "''");
+            Funciones_SQL.llamar_metodo(String.format("CALL crear_pelicula('%s','%s', %s, '%s', '%s', %s, %s);", cip, titulo_p, ano_produccion, titulo_s, nacionalidad, presupuesto, duracion));
             if (!url.isEmpty() && !url.equals(" "))
                 Posters.agregar(cip, url);
             refrescar_pagina();
@@ -192,8 +195,8 @@ public class Pelicula_Bean implements Serializable {
         }
     }
 
-    public String obtener_poster(String id) {
-        return Posters.obtener_poster(id);
+    public String obtener_poster(String id, String value) {
+        return Posters.obtener_poster(id, value);
     }
 
     public void toggleSelected(Pelicula pel) {
@@ -218,7 +221,9 @@ public class Pelicula_Bean implements Serializable {
         esAccion = false;
         esEditable = false;
     }
-
+    public String titulo_pelicula(Pelicula pel) {
+        return pel.getTitulo_p().replace("'", " ").replace("\"", " ");
+    }
     public void actualizar_pelicula(Pelicula pel) {
         try {
             if (pel.getTitulo_p() == null || pel.getTitulo_p().isEmpty()) {
@@ -267,6 +272,7 @@ public class Pelicula_Bean implements Serializable {
         esEliminar = false;
         for (Pelicula p : peliculasSeleccionadas) {
             try {
+                Posters.borrar(p.getCip());
                 Funciones_SQL.llamar_metodo(String.format("CALL eliminar_pelicula('%s');", p.getCip()));
             } catch (SQLException e) {
                 e.printStackTrace();

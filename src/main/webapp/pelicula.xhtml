@@ -165,13 +165,13 @@
             <div class="card">
                 <div class="card-content">
                     <p:dataTable id="tablaFestivales" var="pel" value="#{pelicula.peliculas}"
-                                 scrollHeight="250" paginator="true" rows="4">
+                                 scrollHeight="250" scrollable="true" sortMode="multiple">
                         <p:column headerText="¿Eliminar?" rendered="#{pelicula.esEliminar}">
                             <p:toggleSwitch>
                                 <p:ajax listener="#{pelicula.toggleSelected(pel)}"/>
                             </p:toggleSwitch>
                         </p:column>
-                        <p:column headerText="Titulo Original">
+                        <p:column headerText="Titulo Original" sortBy="#{pel.titulo_p}">
                             <h:outputText value="#{pel.titulo_p}" styleClass="content"
                                           rendered="#{not pelicula.esEditable}"/>
                             <h:inputText value="#{pel.titulo_p}" rendered="#{pelicula.esEditable}" styleClass="input">
@@ -179,7 +179,7 @@
                                         update="@form"/>
                             </h:inputText>
                         </p:column>
-                        <p:column headerText="Titulo en Español">
+                        <p:column headerText="Titulo en Español" sortBy="#{pel.titulo_s}">
                             <h:outputText value="#{pel.titulo_s}" styleClass="content"
                                           rendered="#{not pelicula.esEditable}"/>
                             <h:inputText value="#{pel.titulo_s}" rendered="#{pelicula.esEditable}" styleClass="input">
@@ -187,7 +187,7 @@
                                         update="@form"/>
                             </h:inputText>
                         </p:column>
-                        <p:column headerText="Nacionalidad">
+                        <p:column headerText="Nacionalidad" sortBy="#{pel.nacionalidad}">
                             <h:outputText value="#{pel.nacionalidad}" styleClass="content"
                                           rendered="#{not pelicula.esEditable}"/>
                             <h:inputText value="#{pel.nacionalidad}" rendered="#{pelicula.esEditable}"
@@ -196,7 +196,7 @@
                                         update="@form"/>
                             </h:inputText>
                         </p:column>
-                        <p:column headerText="Año de Producción">
+                        <p:column headerText="Año de Producción" sortBy="#{pel.ano_produccion}">
                             <h:outputText value="#{pel.ano_produccion}" styleClass="content"
                                           rendered="#{not pelicula.esEditable}"/>
                             <h:inputText value="#{pel.ano_produccion}" rendered="#{pelicula.esEditable}"
@@ -205,7 +205,7 @@
                                         update="@form"/>
                             </h:inputText>
                         </p:column>
-                        <p:column headerText="Presupuesto">
+                        <p:column headerText="Presupuesto" sortBy="#{pel.presupuesto}">
                             <h:outputText value="#{pel.presupuesto}" styleClass="content"
                                           rendered="#{not pelicula.esEditable}">
                                 <f:convertNumber type="currency" currencySymbol="$"/>
@@ -216,7 +216,7 @@
                                         update="@form"/>
                             </h:inputText>
                         </p:column>
-                        <p:column headerText="Duracion">
+                        <p:column headerText="Duracion" sortBy="#{pel.duracion}">
                             <h:outputText value="#{pel.duracion}" styleClass="content"
                                           rendered="#{not pelicula.esEditable}"/>
                             <h:inputText value="#{pel.duracion}" rendered="#{pelicula.esEditable}" styleClass="input">
@@ -225,12 +225,12 @@
                             </h:inputText>
                         </p:column>
                         <p:column headerText="Poster" rendered="#{not pelicula.esAccion}">
-                            <p:commandButton type="button" value="Ver" onclick="PF('#{pel.titulo_p}').show()"
+                            <p:commandButton type="button" value="Ver" onclick="PF('#{pelicula.titulo_pelicula(pel)}').show()"
                                              icon="pi pi-eye"/>
-                            <p:dialog header="#{pel.titulo_p}" widgetVar="#{pel.titulo_p}" modal="true"
+                            <p:dialog header="#{pel.titulo_p}" widgetVar="#{pelicula.titulo_pelicula(pel)}" modal="true"
                                       draggable="false" resizable="false" showEffect="fade" hideEffect="fade">
                                 <p:graphicImage
-                                        value="#{pelicula.obtener_poster(pel.cip)}"
+                                        value="#{pelicula.obtener_poster(pel.cip, pel.titulo_p)}"
                                         width="100%"/>
                             </p:dialog>
                         </p:column>
@@ -289,6 +289,15 @@
         </div>
     </div>
     <script>
+        function showLoading() {
+            // Mostrar la animación de carga
+            PrimeFaces.ajax.AjaxUtils.showStatus('ajaxStatus');
+        }
+
+        function hideLoading() {
+            // Ocultar la animación de carga
+            PrimeFaces.ajax.AjaxUtils.hideStatus('ajaxStatus');
+        }
         function api() {
             var value = document.getElementById('id_data').value;
             if (value !== "" || value !== null) {
