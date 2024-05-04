@@ -104,7 +104,7 @@ public class Pelicula_Bean implements Serializable {
             peliculas = gson.fromJson(json, type);
         } catch (Exception e) {
             peliculas = null;
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -157,6 +157,7 @@ public class Pelicula_Bean implements Serializable {
     }
 
     public void crear() {
+
         try {
             if (titulo_p == null || titulo_p.isEmpty() || titulo_p.length() > 44) {
                 FacesContext.getCurrentInstance().addMessage("titulo", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Titulo inválido"));
@@ -174,13 +175,19 @@ public class Pelicula_Bean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage("nacionalidad", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nacionalidad inválida"));
                 return;
             }
-            if (presupuesto <= 0 || (presupuesto + "").length() > 10) {
+            if (presupuesto <= 0) {
                 FacesContext.getCurrentInstance().addMessage("presupuesto", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Presupuesto inválido"));
                 return;
             }
             if (duracion <= 0 || (duracion + "").length() > 3) {
                 FacesContext.getCurrentInstance().addMessage("duracion", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Duración inválida"));
                 return;
+            }
+            for (Pelicula p : peliculas) {
+                if (p.getTitulo_p().equals(titulo_p)) {
+                    FacesContext.getCurrentInstance().addMessage("titulo", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Pelicula ya existente"));
+                    return;
+                }
             }
             String cip = (Integer.parseInt(Objects.requireNonNull(Funciones_SQL.llamar_metodo_json("CALL id_alto_pelicula();"))) + 1) + "";
             titulo_p = titulo_p.replace("'", "''").replace("\"", "''");
@@ -191,7 +198,7 @@ public class Pelicula_Bean implements Serializable {
                 Posters.agregar(cip, url);
             refrescar_pagina();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -262,7 +269,7 @@ public class Pelicula_Bean implements Serializable {
             }
             Funciones_SQL.llamar_metodo(String.format("CALL actualizar_pelicula('%s','%s', '%s', '%s', '%s', '%s', '%s');", pel.getCip(), pel.getTitulo_p(), pel.getAno_produccion() + "", pel.getTitulo_s(), pel.getNacionalidad(), pel.getPresupuesto() + "", pel.getDuracion() + ""));
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
     }
@@ -275,7 +282,7 @@ public class Pelicula_Bean implements Serializable {
                 Posters.borrar(p.getCip());
                 Funciones_SQL.llamar_metodo(String.format("CALL eliminar_pelicula('%s');", p.getCip()));
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
         refrescar_pagina();
@@ -292,7 +299,7 @@ public class Pelicula_Bean implements Serializable {
         try {
             externalContext.redirect(externalContext.getRequestContextPath() + "/pelicula.xhtml");
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -313,7 +320,7 @@ public class Pelicula_Bean implements Serializable {
             document.add(table);
             document.close();
         } catch (DocumentException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return outputStream.toByteArray();
