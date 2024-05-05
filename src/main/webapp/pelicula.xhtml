@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
     <link href="styles/theme.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="styles/main.css" rel="stylesheet" type="text/css" media="all"/>
+    <link rel="icon" type="image/x-icon" href="film_video_23252.ico"/>
 </h:head>
 <h:body>
     <div class="hero is-info">
@@ -165,7 +166,8 @@
             <div class="card">
                 <div class="card-content">
                     <p:dataTable id="tablaFestivales" var="pel" value="#{pelicula.peliculas}"
-                                 scrollHeight="250" scrollable="true" sortMode="multiple">
+                                 scrollHeight="250" paginator="true" paginatorPosition="bottom" rows="4"
+                                 sortMode="multiple">
                         <p:column headerText="¿Eliminar?" rendered="#{pelicula.esEliminar}">
                             <p:toggleSwitch>
                                 <p:ajax listener="#{pelicula.toggleSelected(pel)}"/>
@@ -225,7 +227,8 @@
                             </h:inputText>
                         </p:column>
                         <p:column headerText="Poster" rendered="#{not pelicula.esAccion}">
-                            <p:commandButton type="button" value="Ver" onclick="PF('#{pelicula.titulo_pelicula(pel)}').show()"
+                            <p:commandButton type="button" value="Ver"
+                                             onclick="PF('#{pelicula.titulo_pelicula(pel)}').show()"
                                              icon="pi pi-eye"/>
                             <p:dialog header="#{pel.titulo_p}" widgetVar="#{pelicula.titulo_pelicula(pel)}" modal="true"
                                       draggable="false" resizable="false" showEffect="fade" hideEffect="fade">
@@ -298,6 +301,7 @@
             // Ocultar la animación de carga
             PrimeFaces.ajax.AjaxUtils.hideStatus('ajaxStatus');
         }
+
         function api() {
             var value = document.getElementById('id_data').value;
             if (value !== "" || value !== null) {

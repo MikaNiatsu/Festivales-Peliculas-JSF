@@ -62,15 +62,20 @@ root {
     padding: 20px 0;
     text-align: center;
     width: 100%;
+    position: fixed; /* Se establece la posición fija */
+    bottom: 0; /* Se coloca en la parte inferior */
+    left: 0; /* Se coloca en el borde izquierdo */
 }
+
 
 .boton-esquina {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
+    bottom: 10%;
+    left: 2%;
     padding: 10px 20px;
     z-index: 9999;
 }
+
 .loading-overlay {
     position: fixed;
     top: 0;
@@ -94,8 +99,12 @@ root {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 
