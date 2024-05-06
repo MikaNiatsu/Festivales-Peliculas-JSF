@@ -1,8 +1,6 @@
 package co.edu.unbosque.services;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import okhttp3.OkHttpClient;
@@ -15,7 +13,6 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class Posters {
     private static Map<String, String> posters;
@@ -25,7 +22,7 @@ public class Posters {
         posters = new HashMap<>();
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         String filePath = externalContext.getRealPath("/util/poster.json");
-        if(!new File(filePath).exists())
+        if (!new File(filePath).exists())
             try {
                 FileUtils.writeStringToFile(new File(filePath), "{}", "UTF-8");
             } catch (IOException e) {
@@ -51,7 +48,7 @@ public class Posters {
 
     public static String obtener_poster(String key, String value) {
         leer_json();
-        if(!posters.containsKey(key)) {
+        if (!posters.containsKey(key)) {
             OkHttpClient client = new OkHttpClient();
             value = value.replaceAll("'", "%27");
             String url = "http://www.omdbapi.com/?t=" + value + "&apikey=b559dcfa";
@@ -89,7 +86,7 @@ public class Posters {
         String json = gson.toJson(posters);
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         String filePath = externalContext.getRealPath("/util/poster.json");
-        if(!new File(filePath).exists())
+        if (!new File(filePath).exists())
             try {
                 FileUtils.writeStringToFile(new File(filePath), "{}", "UTF-8");
             } catch (IOException e) {
