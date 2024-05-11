@@ -1,21 +1,21 @@
 package co.edu.unbosque.persistence;
 
 public class Trabajo {
-    private int cip;
+    private String cip;
     private String nombre_persona;
     private String tarea;
 
-    public Trabajo(int cip, String nombre_persona, String tarea) {
+    public Trabajo(String cip, String nombre_persona, String tarea) {
         this.cip = cip;
         this.nombre_persona = nombre_persona;
         this.tarea = tarea;
     }
 
-    public int getCip() {
+    public String getCip() {
         return cip;
     }
 
-    public void setCip(int cip) {
+    public void setCip(String cip) {
         this.cip = cip;
     }
 

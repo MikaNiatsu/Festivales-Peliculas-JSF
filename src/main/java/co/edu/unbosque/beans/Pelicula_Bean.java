@@ -1,8 +1,9 @@
 package co.edu.unbosque.beans;
+
 import co.edu.unbosque.persistence.Pelicula;
-import co.edu.unbosque.services.Posters;
 import co.edu.unbosque.services.Descargador;
 import co.edu.unbosque.services.Funciones_SQL;
+import co.edu.unbosque.services.Posters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -40,6 +41,21 @@ public class Pelicula_Bean implements Serializable {
     private String nacionalidad;
     private int presupuesto;
     private int duracion;
+    private List<String> cips = new ArrayList<>();
+    private String url;
+    private List<Pelicula> peliculasSeleccionadas = new ArrayList<>();
+
+    public List<String> getCips() {
+        cips = new ArrayList<>();
+        for (Pelicula p : peliculas) {
+            cips.add(p.getCip());
+        }
+        return cips;
+    }
+
+    public void setCips(List<String> cips) {
+        this.cips = cips;
+    }
 
     public String getUrl() {
         return url;
@@ -48,8 +64,6 @@ public class Pelicula_Bean implements Serializable {
     public void setUrl(String url) {
         this.url = url;
     }
-
-    private String url;
 
     public String getTitulo_p() {
         return titulo_p;
@@ -90,8 +104,6 @@ public class Pelicula_Bean implements Serializable {
     public void setDuracion(int duracion) {
         this.duracion = duracion;
     }
-
-    private List<Pelicula> peliculasSeleccionadas = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -228,9 +240,11 @@ public class Pelicula_Bean implements Serializable {
         esAccion = false;
         esEditable = false;
     }
+
     public String titulo_pelicula(Pelicula pel) {
         return pel.getTitulo_p().replace("'", " ").replace("\"", " ");
     }
+
     public void actualizar_pelicula(Pelicula pel) {
         try {
             if (pel.getTitulo_p() == null || pel.getTitulo_p().isEmpty()) {

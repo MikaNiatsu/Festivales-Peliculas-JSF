@@ -166,7 +166,7 @@
             <div class="card">
                 <div class="card-content">
                     <p:dataTable id="tablaFestivales" var="pel" value="#{pelicula.peliculas}"
-                                 scrollHeight="250" paginator="true" paginatorPosition="bottom" rows="4"
+                                 scrollHeight="200" scrollable="true"
                                  sortMode="multiple">
                         <p:column headerText="¿Eliminar?" rendered="#{pelicula.esEliminar}">
                             <p:toggleSwitch>

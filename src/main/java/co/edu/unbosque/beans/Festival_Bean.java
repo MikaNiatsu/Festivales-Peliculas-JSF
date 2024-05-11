@@ -85,16 +85,16 @@ public class Festival_Bean implements Serializable {
         return esEliminar;
     }
 
+    public void setEsEliminar(boolean esEliminar) {
+        this.esEliminar = esEliminar;
+    }
+
     public boolean isEsAccion() {
         return esAccion;
     }
 
     public void setEsAccion(boolean esAccion) {
         this.esAccion = esAccion;
-    }
-
-    public void setEsEliminar(boolean esEliminar) {
-        this.esEliminar = esEliminar;
     }
 
     public void toggleSelected(Festival fes) {
@@ -117,6 +117,10 @@ public class Festival_Bean implements Serializable {
             }
             if (fecha == null || fecha.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Fecha inválida"));
+                return;
+            }
+            if (festivales.contains(new Festival(nombre, LocalDate.parse(fecha)))) {
+                FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Festival ya existente"));
                 return;
             }
             LocalDate parsedDate = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("yyyy-MM-dd"));

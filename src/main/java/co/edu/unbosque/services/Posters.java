@@ -59,6 +59,7 @@ public class Posters {
                     .build();
             try {
                 okhttp3.Response response = client.newCall(request).execute();
+                assert response.body() != null;
                 String json = response.body().string();
                 JSONObject jsonObject = new JSONObject(json);
                 if (jsonObject.get("Response").equals("True")) {

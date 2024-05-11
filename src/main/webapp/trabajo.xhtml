@@ -5,20 +5,141 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       data-theme="light"
->
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-    <title>Home</title>
+    <title>Trabajos</title>
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
     <link href="styles/theme.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="styles/main.css" rel="stylesheet" type="text/css" media="all"/>
+    <link rel="icon" type="image/x-icon" href="film_video_23252.ico"/>
+
 </h:head>
 <h:body>
     <div class="hero is-info">
         <div class="hero-body">
-            <p class="title">Bienvenido</p>
+            <p class="title">Trabajos</p>
         </div>
     </div>
     <h:form>
+        <p:growl id="growl" showDetail="true" showSummary="true"/>
+
+        <p:dialog global="true" widgetVar="dialog" header="Crear Tarea" modal="true" showEffect="fade"
+                  hideEffect="fade" resizable="false" draggable="false">
+            <div class="field">
+                <label class="label has-text-black" for="cip">CIP de la pelicula</label>
+                <div class="control">
+                    <p:selectOneMenu id="cip" value="#{trabajo.cip}">
+                        <f:selectItems value="#{pelicula.cips}"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="tarea">Tarea</label>
+                <div class="control">
+                    <p:selectOneMenu id="tarea" value="#{trabajo.trabajo}">
+                        <f:selectItems value="#{tarea.tareas_st}"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="nombre">Nombre de la persona</label>
+                <div class="control">
+                    <p:selectOneMenu id="nombre" value="#{trabajo.nombre}">
+                        <f:selectItems value="#{personaje.nombres}"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+            <div class="field is-grouped is-justify-content-center is-align-items-center">
+                <div class="control is-justify-content-center is-align-items-center">
+                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{trabajo.crear}" update="@form"
+                                     styleClass="ui-button-success"/>
+                </div>
+            </div>
+        </p:dialog>
+
+
+        <div class="container is-flex is-flex-direction-column is-justify-content-center is-align-items-center mb-4 mt-4">
+            <h:panelGroup class="card is-justify-content-center" id="botones" rendered="#{not trabajo.esAccion}">
+                <div class="card-content">
+                    <div class="columns is-justify-content-center">
+                        <div class="column">
+                            <p:commandButton value="Crear" icon="pi pi-plus" oncomplete="PF('dialog').show()"
+                                             update="@form"
+                                             rendered="#{not trabajo.esAccion}" styleClass="ui-button-secondary"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Editar" icon="pi pi-pencil" actionListener="#{trabajo.editar}"
+                                             rendered="#{not trabajo.esAccion}" immediate="true" update="@form"
+                                             styleClass="ui-button-warning"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Eliminar" icon="pi pi-trash" actionListener="#{trabajo.eliminar}"
+                                             rendered="#{not trabajo.esAccion}" immediate="true" update="@form"
+                                             styleClass="ui-button-danger"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Exportar" icon="pi pi-upload" styleClass="ui-button-help"
+                                             ajax="false" actionListener="#{trabajo.descargar_pdf}"
+                                             rendered="#{not trabajo.esAccion}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+            <div class="card">
+                <div class="card-content">
+                    <p:dataTable id="tablaTareas" var="tra" value="#{trabajo.trabajos}"
+                                 scrollHeight="200" scrollable="true">
+                        <p:column headerText="¿Eliminar?" rendered="#{trabajo.esEliminar}">
+                            <p:toggleSwitch>
+                                <p:ajax listener="#{trabajo.toggleSelected(tra)}"/>
+                            </p:toggleSwitch>
+                        </p:column>
+                        <p:column headerText="CIP de la pelicula">
+                            <h:outputText value="#{tra.cip}" rendered="#{not tarea.esEditable}"
+                                          styleClass="content"/>
+                        </p:column>
+                        <p:column headerText="Tarea">
+                            <h:outputText value="#{tra.tarea}" styleClass="content"
+                                          rendered="#{not trabajo.esEditable}"/>
+                            <p:selectOneMenu value="#{tra.tarea}" rendered="#{trabajo.esEditable}">
+                                <f:selectItems value="#{tarea.tareas_st}"/>
+                                <p:ajax event="change" listener="#{trabajo.actualizar(tra)}" process="@this"
+                                        update="@form"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="Nombre de la persona">
+                            <h:outputText value="#{tra.nombre_persona}" rendered="#{not trabajo.esEditable}"
+                                          styleClass="content"/>
+                            <p:selectOneMenu value="#{tra.nombre_persona}"
+                                             rendered="#{trabajo.esEditable}">
+                                <f:selectItems value="#{personaje.nombres}"/>
+                                <p:ajax event="change" listener="#{trabajo.actualizar(tra)}" process="@this"
+                                        update="@form"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <h:panelGroup class="card is-justify-content-center" rendered="#{trabajo.esAccion}">
+                <div class="card-content is-justify-content-center">
+                    <p:commandButton value="Terminar" actionListener="#{trabajo.guardar_editado}" immediate="true"
+                                     update="@form" styleClass="ui-button-success" rendered="#{trabajo.esEditable}"/>
+                    <div class="columns is-justify-content-center">
+                        <div class="column">
+                            <p:commandButton value="Confirmar" actionListener="#{trabajo.confirmar_eliminar}"
+                                             immediate="true" update="@form" styleClass="ui-button-success"
+                                             rendered="#{trabajo.esEliminar}"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Cancelar" actionListener="#{trabajo.cancelar_eliminar}"
+                                             immediate="true" update="@form" styleClass="ui-button-danger"
+                                             rendered="#{trabajo.esEliminar}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+
+        </div>
         <div class="boton-esquina">
             <p:commandButton id="dynaButton" value="Menu" type="button" icon="pi pi-bars"
                              styleClass="ui-button-primary"/>
@@ -41,6 +162,7 @@
                 </p:submenu>
                 <p:divider/>
             </p:tieredMenu>
+
         </div>
     </h:form>
     <div class="footer">
