@@ -38,6 +38,19 @@ public class Festival_Bean implements Serializable {
     private String nombre = "";
     private String fecha = "";
     private List<Festival> festivalesSeleccionados = new ArrayList<>();
+    private List<String> festivales_st = new ArrayList<>();
+
+    public List<String> getFestivales_st() {
+        festivales_st = new ArrayList<>();
+        for (Festival f : festivales) {
+            festivales_st.add(f.getFestival());
+        }
+        return festivales_st;
+    }
+
+    public void setFestivales_st(List<String> festivales_st) {
+        this.festivales_st = festivales_st;
+    }
 
     @PostConstruct
     public void init() {
@@ -131,8 +144,6 @@ public class Festival_Bean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("fecha", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Fecha inválida"));
             return;
         }
-
-        System.out.println(nombre + " " + fecha);
         refrescar_pagina();
     }
 

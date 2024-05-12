@@ -37,7 +37,7 @@ public class Persona_Bean implements Serializable {
     private boolean esEliminar = false;
     private boolean esAccion = false;
     private String nacionalidad = "";
-    private char sexo = ' ';
+    private char sexo;
     private String nombre = "";
 
     @PostConstruct
@@ -100,10 +100,6 @@ public class Persona_Bean implements Serializable {
 
     public void crear() {
         try {
-            if (sexo == ' ') {
-                FacesContext.getCurrentInstance().addMessage("personaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Sexo inválido"));
-                return;
-            }
             if (nacionalidad.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage("personaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nacionalidad inválida"));
                 return;
@@ -112,11 +108,11 @@ public class Persona_Bean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage("personaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nombre inválido"));
                 return;
             }
-            if (nacionalidad.length() > 14) {
+            if (nacionalidad.length() > 15) {
                 FacesContext.getCurrentInstance().addMessage("personaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nacionalidad muy grande"));
                 return;
             }
-            if (nombre.length() > 14) {
+            if (nombre.length() > 15) {
                 FacesContext.getCurrentInstance().addMessage("personaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nombre muy grande"));
                 return;
             }
@@ -144,19 +140,15 @@ public class Persona_Bean implements Serializable {
     }
 
     public void actualizar(Personaje per) {
-        if (sexo == ' ') {
-            FacesContext.getCurrentInstance().addMessage("personaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Sexo inválido"));
-            return;
-        }
         if (nacionalidad.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage("personaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nacionalidad inválida"));
             return;
         }
-        if (nacionalidad.length() > 14) {
+        if (nacionalidad.length() > 15) {
             FacesContext.getCurrentInstance().addMessage("personaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nacionalidad muy grande"));
             return;
         }
-        if (nombre.length() > 14) {
+        if (nombre.length() > 15) {
             FacesContext.getCurrentInstance().addMessage("personaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Nombre muy grande"));
             return;
         }
