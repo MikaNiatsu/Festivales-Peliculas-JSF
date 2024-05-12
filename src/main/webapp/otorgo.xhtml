@@ -4,7 +4,6 @@
 <html lang="es" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       data-theme="light"
 >
 <h:head>
@@ -12,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
     <link href="styles/theme.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="styles/main.css" rel="stylesheet" type="text/css" media="all"/>
-    <link rel="icon" type="image/x-icon" href="film_video_23252.ico"/>
 </h:head>
 <h:body>
     <div class="hero is-info">
@@ -21,27 +19,6 @@
         </div>
     </div>
     <h:form>
-        <div class="columns is-centered">
-            <div class="box has-background-black" style="max-width: 25%">
-                <p:galleria value="#{index.peliculas}" var="poster" numVisible="5"
-                            responsiveOptions="#{index.responsiveOptions1}"
-                            showCaption="true" style="max-width: 440px">
-                    <p:graphicImage value="#{index.obtener_poster(poster.cip, poster.titulo_p)}"
-                                    alt="#{poster.titulo_p}"
-                                    style="width: 65%; display: block;"/>
-                    <f:facet name="caption">
-                        <h4 class="mb-2">#{poster.titulo_p}</h4>
-                        <p>#{poster.ano_produccion}</p>
-                    </f:facet>
-                    <f:facet name="thumbnail">
-                        <p:graphicImage value="#{index.obtener_poster(poster.cip, poster.titulo_p)}"
-                                        alt="#{poster.titulo_p}"
-                                        style="display: block; width: 100px;"/>
-                    </f:facet>
-                </p:galleria>
-            </div>
-        </div>
-
         <div class="boton-esquina">
             <p:commandButton id="dynaButton" value="Menu" type="button" icon="pi pi-bars"
                              styleClass="ui-button-primary"/>

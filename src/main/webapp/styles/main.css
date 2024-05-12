@@ -1,0 +1,110 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css";
+
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    background: rgb(40, 83, 101);
+    background: -moz-linear-gradient(0deg, rgba(40, 83, 101, 1) 0%, rgba(71, 146, 178, 1) 6%, rgba(102, 198, 255, 1) 43%, rgba(102, 209, 255, 1) 77%);
+    background: -webkit-linear-gradient(0deg, rgba(40, 83, 101, 1) 0%, rgba(71, 146, 178, 1) 6%, rgba(102, 198, 255, 1) 43%, rgba(102, 209, 255, 1) 77%);
+    background: linear-gradient(0deg, rgba(40, 83, 101, 1) 0%, rgba(71, 146, 178, 1) 6%, rgba(102, 198, 255, 1) 43%, rgba(102, 209, 255, 1) 77%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#285365", endColorstr="#66d1ff", GradientType=1);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.main-content {
+    flex: 1;
+}
+
+.footer {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+}
+
+
+root {
+    font-size: 12px;
+    font-family: 'Lato', sans-serif;
+}
+
+.ui-widget {
+    font-family: 'Lato', sans-serif;
+    font-size: 1em;
+}
+
+.main-content {
+    flex: 1;
+}
+
+.footer {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    position: fixed; /* Se establece la posición fija */
+    bottom: 0; /* Se coloca en la parte inferior */
+    left: 0; /* Se coloca en el borde izquierdo */
+}
+
+
+.boton-esquina {
+    position: fixed;
+    bottom: 10%;
+    left: 2%;
+    padding: 10px 20px;
+    z-index: 9999;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5); /* Fondo semi-transparente */
+    z-index: 9999; /* Asegura que esté por encima de otros elementos */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-icon {
+    border: 8px solid #f3f3f3; /* Grueso del borde */
+    border-top: 8px solid #3498db; /* Color del borde superior */
+    border-radius: 50%; /* Forma de círculo */
+    width: 50px; /* Tamaño del círculo */
+    height: 50px; /* Tamaño del círculo */
+    animation: spin 1s linear infinite; /* Animación de rotación */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+

@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      data-theme="light"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Tareas</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
+    <link href="styles/theme.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="styles/main.css" rel="stylesheet" type="text/css" media="all"/>
+    <link rel="icon" type="image/x-icon" href="film_video_23252.ico"/>
+
+</h:head>
+<h:body>
+    <div class="hero is-info">
+        <div class="hero-body">
+            <p class="title">Tareas</p>
+        </div>
+    </div>
+    <h:form>
+        <p:growl id="growl" showDetail="true" showSummary="true"/>
+
+        <p:dialog global="true" widgetVar="dialog" header="Crear Tarea" modal="true" showEffect="fade"
+                  hideEffect="fade" resizable="false" draggable="false">
+            <div class="field">
+                <label class="label has-text-black" for="tarea">Tarea</label>
+                <div class="control">
+                    <p:inputText id="tarea" value="#{tarea.tarea}" placeholder="Tarea"
+                                 styleClass="input"/>
+                </div>
+            </div>
+            <div class="field has-text-black">
+                <label class="label has-text-black" for="sexo">Sexo</label>
+                <div class="control">
+                    <p:selectOneMenu id="sexo" value="#{tarea.sexo_tarea}">
+                        <f:selectItem itemLabel="Masculino" itemValue="M"/>
+                        <f:selectItem itemLabel="Femenino" itemValue="F"/>
+                        <f:selectItem itemLabel="No Aplica" itemValue="N"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+            <div class="field is-grouped is-justify-content-center is-align-items-center">
+                <div class="control is-justify-content-center is-align-items-center">
+                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{tarea.crear}" update="@form"
+                                     styleClass="ui-button-success"/>
+                </div>
+            </div>
+        </p:dialog>
+
+
+        <div class="container is-flex is-flex-direction-column is-justify-content-center is-align-items-center mb-4 mt-4">
+            <h:panelGroup class="card is-justify-content-center" id="botones" rendered="#{not tarea.esAccion}">
+                <div class="card-content">
+                    <div class="columns is-justify-content-center">
+                        <div class="column">
+                            <p:commandButton value="Crear" icon="pi pi-plus" oncomplete="PF('dialog').show()"
+                                             update="@form"
+                                             rendered="#{not tarea.esAccion}" styleClass="ui-button-secondary"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Editar" icon="pi pi-pencil" actionListener="#{tarea.editar}"
+                                             rendered="#{not tarea.esAccion}" immediate="true" update="@form"
+                                             styleClass="ui-button-warning"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Eliminar" icon="pi pi-trash" actionListener="#{tarea.eliminar}"
+                                             rendered="#{not tarea.esAccion}" immediate="true" update="@form"
+                                             styleClass="ui-button-danger"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Exportar" icon="pi pi-upload" styleClass="ui-button-help"
+                                             ajax="false" actionListener="#{tarea.descargar_pdf}"
+                                             rendered="#{not tarea.esAccion}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+            <div class="card">
+                <div class="card-content">
+                    <p:dataTable id="tablaTareas" var="tar" value="#{tarea.tareas}"
+                                 scrollHeight="200" scrollable="true">
+                        <p:column headerText="¿Eliminar?" rendered="#{tarea.esEliminar}">
+                            <p:toggleSwitch>
+                                <p:ajax listener="#{tarea.toggleSelected(tar)}"/>
+                            </p:toggleSwitch>
+                        </p:column>
+                        <p:column headerText="Tarea">
+                            <h:outputText value="#{tar.tarea}" styleClass="content"/>
+                        </p:column>
+                        <p:column headerText="Sexo">
+                            <h:outputText value="#{tar.sexo_tarea}" rendered="#{not tarea.esEditable}"
+                                          styleClass="content"/>
+                            <p:selectOneMenu value="#{tar.sexo_tarea}" styleClass="select"
+                                             rendered="#{tarea.esEditable}">
+                                <f:selectItem itemLabel="Masculino" itemValue="M"
+                                              rendered="#{tar.sexo_tarea.toString() eq 'M'}"/>
+                                <f:selectItem itemLabel="Femenino" itemValue="F"
+                                              rendered="#{tar.sexo_tarea.toString() eq 'F'}"/>
+                                <f:selectItem itemLabel="No Aplica" itemValue="N"
+                                              rendered="#{tar.sexo_tarea.toString() eq 'N'}"/>
+                                <p:ajax event="change" listener="#{tarea.actualizar(tar)}" process="@this"
+                                        update="@form"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <h:panelGroup class="card is-justify-content-center" rendered="#{tarea.esAccion}">
+                <div class="card-content is-justify-content-center">
+                    <p:commandButton value="Terminar" actionListener="#{tarea.guardar_editado}" immediate="true"
+                                     update="@form" styleClass="ui-button-success" rendered="#{tarea.esEditable}"/>
+                    <div class="columns is-justify-content-center">
+                        <div class="column">
+                            <p:commandButton value="Confirmar" actionListener="#{tarea.confirmar_eliminar}"
+                                             immediate="true" update="@form" styleClass="ui-button-success"
+                                             rendered="#{tarea.esEliminar}"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Cancelar" actionListener="#{tarea.cancelar_eliminar}"
+                                             immediate="true" update="@form" styleClass="ui-button-danger"
+                                             rendered="#{tarea.esEliminar}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+
+        </div>
+        <div class="boton-esquina">
+            <p:commandButton id="dynaButton" value="Menu" type="button" icon="pi pi-bars"
+                             styleClass="ui-button-primary"/>
+            <p:tieredMenu overlay="true" trigger="dynaButton" my="left top" at="left bottom" style="width:200px">
+                <p:menuitem value="Inicio" icon="pi pi-fw pi-home" outcome="index.xhtml"/>
+                <p:submenu label="Administración" icon="pi pi-fw pi-pencil">
+                    <p:menuitem value="Cetarmenes" outcome="cetarmen.xhtml"/>
+                    <p:menuitem value="Cines" outcome="cine.xhtml"/>
+                    <p:menuitem value="Festivales" outcome="festival.xhtml"/>
+                    <p:menuitem value="Premios de Festivales" outcome="festivalpremio.xhtml"/>
+                    <p:menuitem value="Otorgos" outcome="otorgo.xhtml"/>
+                    <p:menuitem value="Peliculas" outcome="pelicula.xhtml"/>
+                    <p:menuitem value="Premios" outcome="premio.xhtml"/>
+                    <p:menuitem value="Personajes" outcome="persona.xhtml"/>
+                    <p:menuitem value="Proyecciones" outcome="proyeccion.xhtml"/>
+                    <p:menuitem value="Reconocimientos" outcome="reconocimiento.xhtml"/>
+                    <p:menuitem value="Salas" outcome="sala.xhtml"/>
+                    <p:menuitem value="Tareas" outcome="tarea.xhtml"/>
+                    <p:menuitem value="Trabajos" outcome="trabajo.xhtml"/>
+                </p:submenu>
+                <p:divider/>
+            </p:tieredMenu>
+
+        </div>
+    </h:form>
+    <div class="footer">
+        <div class="content has-text-centered">
+            <p>
+                Universidad el Bosque Copyright &copy; 2024
+            </p>
+        </div>
+    </div>
+
+</h:body>
+</html>
