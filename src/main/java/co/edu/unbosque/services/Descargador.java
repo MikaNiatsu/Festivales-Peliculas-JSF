@@ -10,10 +10,13 @@ import java.io.InputStream;
 
 public class Descargador {
     public static void descargar_pdf(byte[] contenido, String nombreArchivo) {
+        if (contenido == null) {
+            return;
+        }
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesContext.getExternalContext();
         HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
- 
+
         response.reset();
         response.setContentType("application/pdf");
         response.setContentLength(contenido.length);

@@ -3,11 +3,11 @@ package co.edu.unbosque.persistence;
 public class Otorgo {
 
     private String festival;
-    private String certamen;
+    private int certamen;
     private String premio;
-    private int cip;
+    private String cip;
 
-    public Otorgo(String festival, String certamen, String premio, int cip) {
+    public Otorgo(String festival, int certamen, String premio, String cip) {
         this.festival = festival;
         this.certamen = certamen;
         this.premio = premio;
@@ -22,11 +22,11 @@ public class Otorgo {
         this.festival = festival;
     }
 
-    public String getCertamen() {
+    public int getCertamen() {
         return certamen;
     }
 
-    public void setCertamen(String certamen) {
+    public void setCertamen(int certamen) {
         this.certamen = certamen;
     }
 
@@ -38,11 +38,11 @@ public class Otorgo {
         this.premio = premio;
     }
 
-    public int getCip() {
+    public String getCip() {
         return cip;
     }
 
-    public void setCip(int cip) {
+    public void setCip(String cip) {
         this.cip = cip;
     }
 }
