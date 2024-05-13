@@ -155,8 +155,13 @@ public class Festival_Premio_Bean implements Serializable {
 
             PdfPTable table = new PdfPTable(3);
             header(table);
-            for (Festival_Premio p : festival_premios) {
-                agregar_rows(table, p);
+            if (festival_premios == null) {
+                FacesContext.getCurrentInstance().addMessage("festival_premio", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay registros para mostrar"));
+                return null;
+            } else {
+                for (Festival_Premio p : festival_premios) {
+                    agregar_rows(table, p);
+                }
             }
 
             document.add(table);

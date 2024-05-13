@@ -179,8 +179,14 @@ public class Certamen_Bean implements Serializable {
 
             PdfPTable table = new PdfPTable(3);
             header(table);
-            for (Certamen c : certamenes) {
-                agregar_rows(table, c);
+
+            if (certamenes != null) {
+                for (Certamen c : certamenes) {
+                    agregar_rows(table, c);
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage("certamen", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay registros para mostrar"));
+                return null;
             }
             document.add(table);
             document.close();

@@ -154,8 +154,13 @@ public class Premio_Bean implements Serializable {
 
             PdfPTable table = new PdfPTable(2);
             header(table);
-            for (Premio p : premios) {
-                agregar_rows(table, p);
+            if (premios == null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay registros para mostrar"));
+                return null;
+            } else {
+                for (Premio p : premios) {
+                    agregar_rows(table, p);
+                }
             }
 
             document.add(table);

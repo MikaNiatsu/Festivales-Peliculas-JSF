@@ -5,27 +5,207 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       data-theme="light"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
 >
 <h:head>
-    <title>Home</title>
+    <title>Proyecciones</title>
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
     <link href="styles/theme.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="styles/main.css" rel="stylesheet" type="text/css" media="all"/>
+    <link rel="icon" type="image/x-icon" href="film_video_23252.ico"/>
 </h:head>
 <h:body>
     <div class="hero is-info">
         <div class="hero-body">
-            <p class="title">Bienvenido</p>
+            <p class="title">Proyecciones</p>
         </div>
     </div>
     <h:form>
+        <p:growl id="growl" showDetail="true" showSummary="true"/>
+
+        <p:dialog global="true" widgetVar="dialog" header="Crear Proyeccion" modal="true" showEffect="fade"
+                  hideEffect="fade" resizable="false" draggable="false">
+            <div class="field">
+                <label class="label has-text-black" for="cine">Cine</label>
+                <div class="control">
+                    <p:selectOneMenu id="cine" value="#{proyeccion.cine}">
+                        <f:selectItems value="#{sala.cines}"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="sala">Sala</label>
+                <div class="control">
+                    <p:selectOneMenu id="sala" value="#{proyeccion.sala}">
+                        <f:selectItems value="#{sala.salas_st}"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="cip">CIP</label>
+                <div class="control">
+                    <p:selectOneMenu id="cip" value="#{proyeccion.cip}">
+                        <f:selectItems value="#{pelicula.cips}"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="fecha">Fecha de Estreno</label>
+                <div class="control">
+                    <p:inputMask id="fecha" value="#{proyeccion.fecha}" mask="9999-99-99" placeholder="yyyy-mm-dd"
+                                 styleClass="input"/>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="estreno">Dias de Estreno</label>
+                <div class="control">
+                    <p:inputNumber id="estreno" value="#{proyeccion.dias_estreno}" placeholder="Numero de Sala"
+                                   maxlength="3"
+                                   styleClass="input"/>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="especta">Espectadores</label>
+                <div class="control">
+                    <p:inputNumber id="especta" value="#{proyeccion.espectadores}" placeholder="Espectadores"
+                                   maxlength="6"
+                                   styleClass="input"/>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="reca">Recaudacion</label>
+                <div class="control">
+                    <p:inputNumber id="reca" value="#{proyeccion.recaudacion}" placeholder="Recaudacion" maxlength="8"
+                                   styleClass="input"/>
+                </div>
+            </div>
+            <div class="field is-grouped is-justify-content-center is-align-items-center">
+                <div class="control is-justify-content-center is-align-items-center">
+                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{proyeccion.crear}"
+                                     update="@form"
+                                     styleClass="ui-button-success"/>
+                </div>
+            </div>
+        </p:dialog>
+        <div class="container is-flex is-flex-direction-column is-justify-content-center is-align-items-center mb-4 mt-4">
+            <h:panelGroup class="card is-justify-content-center" id="botones" rendered="#{not proyeccion.esAccion}">
+                <div class="card-content">
+                    <div class="columns is-justify-content-center">
+                        <div class="column">
+                            <p:commandButton value="Crear" icon="pi pi-plus" oncomplete="PF('dialog').show()"
+                                             update="@form"
+                                             rendered="#{not proyeccion.esAccion}" styleClass="ui-button-secondary"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Editar" icon="pi pi-pencil" actionListener="#{proyeccion.editar}"
+                                             rendered="#{not proyeccion.esAccion}" immediate="true" update="@form"
+                                             styleClass="ui-button-warning"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Eliminar" icon="pi pi-trash" actionListener="#{proyeccion.eliminar}"
+                                             rendered="#{not proyeccion.esAccion}" immediate="true" update="@form"
+                                             styleClass="ui-button-danger"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Exportar" icon="pi pi-upload" styleClass="ui-button-help"
+                                             ajax="false" actionListener="#{proyeccion.descargar_pdf}"
+                                             rendered="#{not proyeccion.esAccion}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+            <div class="card">
+                <div class="card-content">
+                    <p:dataTable id="tablaPremios" var="pr" value="#{proyeccion.proyecciones}"
+                                 scrollHeight="200" scrollable="true">
+                        <p:column headerText="¿Eliminar?" rendered="#{proyeccion.esEliminar}">
+                            <p:toggleSwitch>
+                                <p:ajax listener="#{proyeccion.toggleSelected(pr)}"/>
+                            </p:toggleSwitch>
+                        </p:column>
+                        <p:column headerText="Cine">
+                            <h:outputText value="#{pr.cine}" styleClass="content"/>
+                        </p:column>
+                        <p:column headerText="Sala">
+                            <h:outputText value="#{pr.sala}" styleClass="content"/>
+                        </p:column>
+                        <p:column headerText="CIP">
+                            <h:outputText value="#{pr.cip}" styleClass="content"
+                                          rendered="#{not proyeccion.esEditable}"/>
+                            <p:selectOneMenu value="#{pr.cip}" rendered="#{proyeccion.esEditable}">
+                                <f:selectItems value="#{pelicula.cips}"/>
+                                <p:ajax event="change" listener="#{proyeccion.actualizar(pr)}" process="@this"
+                                        update="@form"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="Fecha de Estreno">
+                            <h:outputText value="#{pr.fecha_estreno}" rendered="#{not proyeccion.esEditable}"
+                                          styleClass="content"/>
+                            <p:inputMask value="#{pr.fecha_estreno}" mask="9999-99-99"
+                                         rendered="#{proyeccion.esEditable}" styleClass="input"
+                                         converter="localDateConverter">
+                                <p:ajax event="change" listener="#{proyeccion.actualizar(pr)}" process="@this"
+                                        update="@form"/>
+                            </p:inputMask>
+                        </p:column>
+                        <p:column headerText="Dias de Estreno">
+                            <h:outputText value="#{pr.fecha_estreno}" styleClass="content"
+                                          rendered="#{not proyeccion.esEditable}"/>
+                            <p:inputNumber value="#{pr.fecha_estreno}" maxlength="3"
+                                           rendered="#{proyeccion.esEditable}">
+                                <p:ajax event="change" listener="#{proyeccion.actualizar(pr)}" process="@this"
+                                        update="@form"/>
+                            </p:inputNumber>
+                        </p:column>
+                        <p:column headerText="Espectadores">
+                            <h:outputText value="#{pr.espectadores}" styleClass="content"
+                                          rendered="#{not proyeccion.esEditable}"/>
+                            <p:inputNumber value="#{pro.espectadores}" maxlength="6"
+                                           rendered="#{proyeccion.esEditable}">
+                                <p:ajax event="change" listener="#{proyeccion.actualizar(pr)}" process="@this"
+                                        update="@form"/>
+                            </p:inputNumber>
+                        </p:column>
+                        <p:column headerText="Recaudacion">
+                            <h:outputText value="#{pr.recaudacion}" styleClass="content"
+                                          rendered="#{not proyeccion.esEditable}"/>
+                            <p:inputNumber value="#{pr.recaudacion}" maxlength="8"
+                                           rendered="#{proyeccion.esEditable}">
+                                <p:ajax event="change" listener="#{proyeccion.actualizar(pr)}" process="@this"
+                                        update="@form"/>
+                            </p:inputNumber>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <h:panelGroup class="card is-justify-content-center" rendered="#{proyeccion.esAccion}">
+                <div class="card-content is-justify-content-center">
+                    <p:commandButton value="Terminar" actionListener="#{proyeccion.guardar_editado}" immediate="true"
+                                     update="@form" styleClass="ui-button-success" rendered="#{proyeccion.esEditable}"/>
+                    <div class="columns is-justify-content-center">
+                        <div class="column">
+                            <p:commandButton value="Confirmar" actionListener="#{proyeccion.confirmar_eliminar}"
+                                             immediate="true" update="@form" styleClass="ui-button-success"
+                                             rendered="#{proyeccion.esEliminar}"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Cancelar" actionListener="#{proyeccion.cancelar_eliminar}"
+                                             immediate="true" update="@form" styleClass="ui-button-danger"
+                                             rendered="#{proyeccion.esEliminar}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+
+        </div>
+
         <div class="boton-esquina">
             <p:commandButton id="dynaButton" value="Menu" type="button" icon="pi pi-bars"
                              styleClass="ui-button-primary"/>
             <p:tieredMenu overlay="true" trigger="dynaButton" my="left top" at="left bottom" style="width:200px">
                 <p:menuitem value="Inicio" icon="pi pi-fw pi-home" outcome="index.xhtml"/>
                 <p:submenu label="Administración" icon="pi pi-fw pi-pencil">
-                    <p:menuitem value="Cetarmenes" outcome="cetarmen.xhtml"/>
+                    <p:menuitem value="Certamenes" outcome="cetarmen.xhtml"/>
                     <p:menuitem value="Cines" outcome="cine.xhtml"/>
                     <p:menuitem value="Festivales" outcome="festival.xhtml"/>
                     <p:menuitem value="Premios de Festivales" outcome="festivalpremio.xhtml"/>

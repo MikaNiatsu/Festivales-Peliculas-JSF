@@ -327,8 +327,13 @@ public class Pelicula_Bean implements Serializable {
 
             PdfPTable table = new PdfPTable(7);
             header(table);
-            for (Pelicula p : peliculas) {
-                agregar_rows(table, p);
+            if (peliculas == null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay registros para mostrar"));
+                return null;
+            } else {
+                for (Pelicula p : peliculas) {
+                    agregar_rows(table, p);
+                }
             }
 
             document.add(table);

@@ -38,6 +38,7 @@ public class Cine_Bean implements Serializable {
     private String ciudad = "";
     private String direccion = "";
     private List<Cine> cinesSeleccionados = new ArrayList<>();
+    private List<String> cines_st = new ArrayList<>();
 
     public List<Cine> getCinesSeleccionados() {
         return cinesSeleccionados;
@@ -251,8 +252,13 @@ public class Cine_Bean implements Serializable {
 
             PdfPTable table = new PdfPTable(3);
             header(table);
-            for (Cine c : cines) {
-                agregar_rows(table, c);
+            if (cines == null) {
+                FacesContext.getCurrentInstance().addMessage("cine", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay registros para mostrar"));
+                return null;
+            } else {
+                for (Cine c : cines) {
+                    agregar_rows(table, c);
+                }
             }
             document.add(table);
             document.close();
@@ -286,4 +292,15 @@ public class Cine_Bean implements Serializable {
         Descargador.descargar_pdf(generar_pdf(), "cines.pdf");
     }
 
+    public List<String> getCines_st() {
+        cines_st = new ArrayList<>();
+        for (Cine c : cines) {
+            cines_st.add(c.getCine());
+        }
+        return cines_st;
+    }
+
+    public void setCines_st(List<String> cines_st) {
+        this.cines_st = cines_st;
+    }
 }
