@@ -208,10 +208,14 @@ public class Trabajo_Bean implements Serializable {
 
             PdfPTable table = new PdfPTable(3);
             header(table);
-            for (Trabajo t : trabajos) {
-                agregar_rows(table, t);
+            if (trabajos == null) {
+                FacesContext.getCurrentInstance().addMessage("tarea", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay registros para mostrar"));
+                return null;
+            } else {
+                for (Trabajo t : trabajos) {
+                    agregar_rows(table, t);
+                }
             }
-
             document.add(table);
             document.close();
         } catch (DocumentException e) {

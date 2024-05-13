@@ -5,27 +5,164 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       data-theme="light"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
 >
 <h:head>
-    <title>Home</title>
+    <title>Reconocimientos</title>
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
     <link href="styles/theme.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="styles/main.css" rel="stylesheet" type="text/css" media="all"/>
+    <link rel="icon" type="image/x-icon" href="film_video_23252.ico"/>
 </h:head>
 <h:body>
     <div class="hero is-info">
         <div class="hero-body">
-            <p class="title">Bienvenido</p>
+            <p class="title">Reconocimientos</p>
         </div>
     </div>
     <h:form>
+        <p:growl id="growl" showDetail="true" showSummary="true"/>
+
+        <p:dialog global="true" widgetVar="dialog" header="Crear Reconocimiento" modal="true" showEffect="fade"
+                  hideEffect="fade" resizable="false" draggable="false">
+            <div class="field">
+                <label class="label has-text-black" for="festival">Festival</label>
+                <div class="control">
+                    <p:selectOneMenu id="festival" value="#{reconocimiento.festival}">
+                        <f:selectItems value="#{certamen.festivales}"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="certamen">Certamen
+                </label>
+                <div class="control">
+                    <p:selectOneMenu id="certamen" value="#{reconocimiento.anio}">
+                        <f:selectItems value="#{certamen.ano_certamenes}"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="premio">Premio
+                </label>
+                <div class="control">
+                    <p:selectOneMenu id="premio" value="#{reconocimiento.premio}">
+                        <f:selectItems value="#{premio.premios_st}"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label has-text-black" for="persona">Nombre de la Persona</label>
+                <div class="control">
+                    <p:inputText id="persona" value="#{reconocimiento.nombre}" placeholder="Nombre de la Persona"
+                                 styleClass="input"/>
+                </div>
+            </div>
+            <div class="field is-grouped is-justify-content-center is-align-items-center">
+                <div class="control is-justify-content-center is-align-items-center">
+                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{reconocimiento.crear}"
+                                     update="@form"
+                                     styleClass="ui-button-success"/>
+                </div>
+            </div>
+        </p:dialog>
+
+
+        <div class="container is-flex is-flex-direction-column is-justify-content-center is-align-items-center mb-4 mt-4">
+            <h:panelGroup class="card is-justify-content-center" id="botones" rendered="#{not reconocimiento.esAccion}">
+                <div class="card-content">
+                    <div class="columns is-justify-content-center">
+                        <div class="column">
+                            <p:commandButton value="Crear" icon="pi pi-plus" oncomplete="PF('dialog').show()"
+                                             update="@form"
+                                             rendered="#{not reconocimiento.esAccion}"
+                                             styleClass="ui-button-secondary"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Editar" icon="pi pi-pencil"
+                                             actionListener="#{reconocimiento.editar}"
+                                             rendered="#{not reconocimiento.esAccion}" immediate="true" update="@form"
+                                             styleClass="ui-button-warning"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Eliminar" icon="pi pi-trash"
+                                             actionListener="#{reconocimiento.eliminar}"
+                                             rendered="#{not reconocimiento.esAccion}" immediate="true" update="@form"
+                                             styleClass="ui-button-danger"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Exportar" icon="pi pi-upload" styleClass="ui-button-help"
+                                             ajax="false" actionListener="#{reconocimiento.descargar_pdf}"
+                                             rendered="#{not reconocimiento.esAccion}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+            <div class="card">
+                <div class="card-content">
+                    <p:dataTable id="tablaPremios" var="rec" value="#{reconocimiento.reconocimientos}"
+                                 scrollHeight="200" scrollable="true">
+                        <p:column headerText="¿Eliminar?" rendered="#{reconocimiento.esEliminar}">
+                            <p:toggleSwitch>
+                                <p:ajax listener="#{reconocimiento.toggleSelected(rec)}"/>
+                            </p:toggleSwitch>
+                        </p:column>
+                        <p:column headerText="Festival">
+                            <h:outputText value="#{rec.festival}" styleClass="content"/>
+                        </p:column>
+                        <p:column headerText="Certamen">
+                            <h:outputText value="#{rec.certamen}" styleClass="content"/>
+                        </p:column>
+                        <p:column headerText="Premio">
+                            <h:outputText value="#{rec.premio}" styleClass="content"
+                                          rendered="#{not reconocimiento.esEditable}"/>
+                            <p:selectOneMenu value="#{rec.premio}" rendered="#{reconocimiento.esEditable}"
+                                             styleClass="input">
+                                <f:selectItems value="#{premio.premios_st}"/>
+                                <p:ajax event="change" listener="#{reconocimiento.actualizar(rec)}" process="@this"
+                                        update="@form"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{rec.nombre_persona}" styleClass="content"
+                                          rendered="#{not reconocimiento.esEditable}"/>
+                            <p:inputText value="#{rec.nombre_persona}" styleClass="input"
+                                         rendered="#{reconocimiento.esEditable}">
+                                <p:ajax event="change" listener="#{reconocimiento.actualizar(rec)}" process="@this"
+                                        update="@form"/>
+                            </p:inputText>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <h:panelGroup class="card is-justify-content-center" rendered="#{reconocimiento.esAccion}">
+                <div class="card-content is-justify-content-center">
+                    <p:commandButton value="Terminar" actionListener="#{reconocimiento.guardar_editado}"
+                                     immediate="true"
+                                     update="@form" styleClass="ui-button-success"
+                                     rendered="#{reconocimiento.esEditable}"/>
+                    <div class="columns is-justify-content-center">
+                        <div class="column">
+                            <p:commandButton value="Confirmar" actionListener="#{reconocimiento.confirmar_eliminar}"
+                                             immediate="true" update="@form" styleClass="ui-button-success"
+                                             rendered="#{reconocimiento.esEliminar}"/>
+                        </div>
+                        <div class="column">
+                            <p:commandButton value="Cancelar" actionListener="#{reconocimiento.cancelar_eliminar}"
+                                             immediate="true" update="@form" styleClass="ui-button-danger"
+                                             rendered="#{reconocimiento.esEliminar}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </div>
         <div class="boton-esquina">
             <p:commandButton id="dynaButton" value="Menu" type="button" icon="pi pi-bars"
                              styleClass="ui-button-primary"/>
             <p:tieredMenu overlay="true" trigger="dynaButton" my="left top" at="left bottom" style="width:200px">
                 <p:menuitem value="Inicio" icon="pi pi-fw pi-home" outcome="index.xhtml"/>
                 <p:submenu label="Administración" icon="pi pi-fw pi-pencil">
-                    <p:menuitem value="Cetarmenes" outcome="cetarmen.xhtml"/>
+                    <p:menuitem value="Certamenes" outcome="cetarmen.xhtml"/>
                     <p:menuitem value="Cines" outcome="cine.xhtml"/>
                     <p:menuitem value="Festivales" outcome="festival.xhtml"/>
                     <p:menuitem value="Premios de Festivales" outcome="festivalpremio.xhtml"/>

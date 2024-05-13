@@ -4,7 +4,7 @@ public class Premio {
     private String premio;
     private String tarea;
 
-    public Premio(String premio, String tarea) {
+    public Premio(String tarea, String premio) {
         this.premio = premio;
         this.tarea = tarea;
     }

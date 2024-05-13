@@ -199,8 +199,13 @@ public class Persona_Bean implements Serializable {
 
             PdfPTable table = new PdfPTable(3);
             header(table);
-            for (Personaje p : personajes) {
-                agregar_rows(table, p);
+            if (personajes == null) {
+                FacesContext.getCurrentInstance().addMessage("personaje", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay registros para mostrar"));
+                return null;
+            } else {
+                for (Personaje p : personajes) {
+                    agregar_rows(table, p);
+                }
             }
 
             document.add(table);

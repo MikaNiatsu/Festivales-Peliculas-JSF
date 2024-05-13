@@ -38,6 +38,8 @@ public class Certamen_Bean implements Serializable {
     private int certamen = 0;
     private String organizador = "";
     private List<Certamen> certamenesSeleccionados = new ArrayList<>();
+    private List<String> festivales = new ArrayList<>();
+    private List<String> ano_certamenes = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -177,8 +179,14 @@ public class Certamen_Bean implements Serializable {
 
             PdfPTable table = new PdfPTable(3);
             header(table);
-            for (Certamen c : certamenes) {
-                agregar_rows(table, c);
+
+            if (certamenes != null) {
+                for (Certamen c : certamenes) {
+                    agregar_rows(table, c);
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage("certamen", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay registros para mostrar"));
+                return null;
             }
             document.add(table);
             document.close();
@@ -250,5 +258,29 @@ public class Certamen_Bean implements Serializable {
 
     public void setCertamenes(List<Certamen> certamenes) {
         this.certamenes = certamenes;
+    }
+
+    public List<String> getFestivales() {
+        festivales = new ArrayList<>();
+        for (Certamen c : certamenes) {
+            festivales.add(c.getFestival());
+        }
+        return festivales;
+    }
+
+    public void setFestivales(List<String> festivales) {
+        this.festivales = festivales;
+    }
+
+    public List<String> getAno_certamenes() {
+        ano_certamenes = new ArrayList<>();
+        for (Certamen c : certamenes) {
+            ano_certamenes.add(String.valueOf(c.getCertamen()));
+        }
+        return ano_certamenes;
+    }
+
+    public void setAno_certamenes(List<String> ano_certamenes) {
+        this.ano_certamenes = ano_certamenes;
     }
 }
