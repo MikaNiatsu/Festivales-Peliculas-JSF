@@ -25,55 +25,98 @@ public class Index_Bean implements Serializable {
     private int activeIndex = 0;
     private List<ResponsiveOption> responsiveOptions1;
 
-    @PostConstruct
-    public void init() {
-        responsiveOptions1 = new ArrayList<>();
-        responsiveOptions1.add(new ResponsiveOption("1024px", 5));
-        responsiveOptions1.add(new ResponsiveOption("768px", 3));
-        responsiveOptions1.add(new ResponsiveOption("560px", 1));
-        Gson gson = new GsonBuilder()
-                .create();
-        Type type = new TypeToken<List<Pelicula>>() {
-        }.getType();
-        try {
-            String json = Funciones_SQL.llamar_metodo_json("CALL obtener_peliculas();");
-            peliculas = gson.fromJson(json, type);
-        } catch (Exception e) {
-            peliculas = null;
-            throw new RuntimeException(e);
-        }
+    /**
+ * Inicializa el bean.
+ */
+@PostConstruct
+public void init() {
+    responsiveOptions1 = new ArrayList<>();
+    responsiveOptions1.add(new ResponsiveOption("1024px", 5));
+    responsiveOptions1.add(new ResponsiveOption("768px", 3));
+    responsiveOptions1.add(new ResponsiveOption("560px", 1));
+    Gson gson = new GsonBuilder().create();
+    Type type = new TypeToken<List<Pelicula>>() {}.getType();
+    try {
+        String json = Funciones_SQL.llamar_metodo_json("CALL obtener_peliculas();");
+        peliculas = gson.fromJson(json, type);
+    } catch (Exception e) {
+        peliculas = null;
+        throw new RuntimeException(e);
     }
+}
 
-    public List<Pelicula> getPeliculas() {
-        return peliculas;
-    }
 
-    public void setPeliculas(List<Pelicula> peliculas) {
-        this.peliculas = peliculas;
-    }
+    /**
+ * Obtiene la lista de películas.
+ *
+ * @return La lista de películas.
+ */
+public List<Pelicula> getPeliculas() {
+    return peliculas;
+}
 
-    public int getActiveIndex() {
-        return activeIndex;
-    }
+/**
+ * Establece la lista de películas.
+ *
+ * @param peliculas La lista de películas a establecer.
+ */
+public void setPeliculas(List<Pelicula> peliculas) {
+    this.peliculas = peliculas;
+}
 
-    public void setActiveIndex(int activeIndex) {
-        this.activeIndex = activeIndex;
-    }
+/**
+ * Obtiene el índice activo.
+ *
+ * @return El índice activo.
+ */
+public int getActiveIndex() {
+    return activeIndex;
+}
 
-    public List<ResponsiveOption> getResponsiveOptions1() {
-        return responsiveOptions1;
-    }
+/**
+ * Establece el índice activo.
+ *
+ * @param activeIndex El índice activo a establecer.
+ */
+public void setActiveIndex(int activeIndex) {
+    this.activeIndex = activeIndex;
+}
 
-    public void setResponsiveOptions1(List<ResponsiveOption> responsiveOptions1) {
-        this.responsiveOptions1 = responsiveOptions1;
-    }
+/**
+ * Obtiene las opciones de respuesta responsivas.
+ *
+ * @return Las opciones de respuesta responsivas.
+ */
+public List<ResponsiveOption> getResponsiveOptions1() {
+    return responsiveOptions1;
+}
 
-    public void changeActiveIndex() {
-        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        this.activeIndex = Integer.valueOf(params.get("index"));
-    }
+/**
+ * Establece las opciones de respuesta responsivas.
+ *
+ * @param responsiveOptions1 Las opciones de respuesta responsivas a establecer.
+ */
+public void setResponsiveOptions1(List<ResponsiveOption> responsiveOptions1) {
+    this.responsiveOptions1 = responsiveOptions1;
+}
 
-    public String obtener_poster(String id, String value) {
-        return Posters.obtener_poster(id, value);
-    }
+/**
+ * Cambia el índice activo.
+ */
+public void changeActiveIndex() {
+    Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+    this.activeIndex = Integer.valueOf(params.get("index"));
+}
+
+/**
+ * Obtiene el póster de una película.
+ *
+ * @param id    El ID de la película.
+ * @param value El valor del póster.
+ * @return El póster de la película.
+ */
+public String obtener_poster(String id, String value) {
+    return Posters.obtener_poster(id, value);
+}
+
 }
