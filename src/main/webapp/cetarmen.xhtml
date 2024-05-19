@@ -99,14 +99,7 @@
                             <h:outputText value="#{cer.festival}" styleClass="content"/>
                         </p:column>
                         <p:column headerText="Certamen">
-                            <h:outputText value="#{cer.certamen}" styleClass="content"
-                                          rendered="#{not certamen.esEditable}"/>
-                            <p:inputMask value="#{cer.certamen}"
-                                         placeholder="Certamen"
-                                         styleClass="input" mask="9999" rendered="#{certamen.esEditable}">
-                                <p:ajax event="change" listener="#{certamen.actualizar(cer)}" process="@this"
-                                        update="@form"/>
-                            </p:inputMask>
+                            <h:outputText value="#{cer.certamen}" styleClass="content"/>
                         </p:column>
                         <p:column headerText="Organizador">
                             <h:outputText value="#{cer.organizador}" rendered="#{not certamen.esEditable}"

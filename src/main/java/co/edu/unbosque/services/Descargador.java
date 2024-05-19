@@ -8,7 +8,17 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * La clase Descargador proporciona un método estático para descargar archivos PDF.
+ */
 public class Descargador {
+
+    /**
+     * Descarga un archivo PDF con el contenido especificado y el nombre de archivo proporcionado.
+     * 
+     * @param contenido      El contenido del archivo PDF como un arreglo de bytes.
+     * @param nombreArchivo  El nombre del archivo PDF.
+     */
     public static void descargar_pdf(byte[] contenido, String nombreArchivo) {
         if (contenido == null) {
             return;

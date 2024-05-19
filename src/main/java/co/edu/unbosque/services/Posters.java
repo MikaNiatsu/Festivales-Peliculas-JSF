@@ -14,10 +14,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * La clase Posters maneja la lectura, escritura y actualización de un archivo JSON que contiene la información de los posters de películas.
+ */
 public class Posters {
     private static Map<String, String> posters;
 
-
+    /**
+     * Lee el archivo JSON que contiene los posters y carga su contenido en un mapa.
+     */
     public static void leer_json() {
         posters = new HashMap<>();
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -40,12 +45,25 @@ public class Posters {
         }
     }
 
+    /**
+     * Agrega un nuevo poster al mapa y actualiza el archivo JSON.
+     *
+     * @param key   La clave del poster.
+     * @param value El valor del poster (URL del poster).
+     */
     public static void agregar(String key, String value) {
         leer_json();
         posters.put(key, value);
         actualizar();
     }
 
+    /**
+     * Obtiene el URL del poster de una película. Si el poster no está en el mapa, consulta la API OMDB para obtener el URL y lo agrega al mapa.
+     *
+     * @param key   La clave del poster.
+     * @param value El título de la película.
+     * @return El URL del poster.
+     */
     public static String obtener_poster(String key, String value) {
         leer_json();
         if (!posters.containsKey(key)) {
@@ -75,13 +93,20 @@ public class Posters {
         return posters.getOrDefault(key, "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png");
     }
 
+    /**
+     * Elimina un poster del mapa y actualiza el archivo JSON.
+     *
+     * @param key La clave del poster a eliminar.
+     */
     public static void borrar(String key) {
         leer_json();
         posters.remove(key);
         actualizar();
     }
 
-
+    /**
+     * Actualiza el archivo JSON con el contenido del mapa de posters.
+     */
     public static void actualizar() {
         Gson gson = new Gson();
         String json = gson.toJson(posters);
@@ -100,5 +125,3 @@ public class Posters {
         }
     }
 }
-
-
