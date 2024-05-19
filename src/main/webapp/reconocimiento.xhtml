@@ -30,6 +30,8 @@
                 <div class="control">
                     <p:selectOneMenu id="festival" value="#{reconocimiento.festival}">
                         <f:selectItems value="#{certamen.festivales}"/>
+                        <p:ajax event="change" update="certamen"/>
+                        <p:ajax event="change" update="premio"/>
                     </p:selectOneMenu>
                 </div>
             </div>
@@ -38,7 +40,7 @@
                 </label>
                 <div class="control">
                     <p:selectOneMenu id="certamen" value="#{reconocimiento.anio}">
-                        <f:selectItems value="#{certamen.ano_certamenes}"/>
+                        <f:selectItems value="#{certamen.get_Ano_certamenes(reconocimiento.festival)}"/>
                     </p:selectOneMenu>
                 </div>
             </div>
@@ -47,15 +49,16 @@
                 </label>
                 <div class="control">
                     <p:selectOneMenu id="premio" value="#{reconocimiento.premio}">
-                        <f:selectItems value="#{premio.premios_st}"/>
+                        <f:selectItems value="#{festival_premio.get_prefio_festival(reconocimiento.festival)}"/>
                     </p:selectOneMenu>
                 </div>
             </div>
             <div class="field">
                 <label class="label has-text-black" for="persona">Nombre de la Persona</label>
                 <div class="control">
-                    <p:inputText id="persona" value="#{reconocimiento.nombre}" placeholder="Nombre de la Persona"
-                                 styleClass="input"/>
+                    <p:selectOneMenu id="persona" value="#{reconocimiento.nombre}">
+                        <f:selectItems value="#{personaje.nombres}"/>
+                    </p:selectOneMenu>
                 </div>
             </div>
             <div class="field is-grouped is-justify-content-center is-align-items-center">
@@ -114,23 +117,16 @@
                             <h:outputText value="#{rec.certamen}" styleClass="content"/>
                         </p:column>
                         <p:column headerText="Premio">
-                            <h:outputText value="#{rec.premio}" styleClass="content"
-                                          rendered="#{not reconocimiento.esEditable}"/>
-                            <p:selectOneMenu value="#{rec.premio}" rendered="#{reconocimiento.esEditable}"
-                                             styleClass="input">
-                                <f:selectItems value="#{premio.premios_st}"/>
-                                <p:ajax event="change" listener="#{reconocimiento.actualizar(rec)}" process="@this"
-                                        update="@form"/>
-                            </p:selectOneMenu>
+                            <h:outputText value="#{rec.premio}" styleClass="content"/>
                         </p:column>
                         <p:column headerText="Nombre">
                             <h:outputText value="#{rec.nombre_persona}" styleClass="content"
                                           rendered="#{not reconocimiento.esEditable}"/>
-                            <p:inputText value="#{rec.nombre_persona}" styleClass="input"
-                                         rendered="#{reconocimiento.esEditable}">
+                            <p:selectOneMenu value="#{rec.nombre_persona}" rendered="#{reconocimiento.esEditable}">
+                                <f:selectItems value="#{personaje.nombres}"/>
                                 <p:ajax event="change" listener="#{reconocimiento.actualizar(rec)}" process="@this"
                                         update="@form"/>
-                            </p:inputText>
+                            </p:selectOneMenu>
                         </p:column>
                     </p:dataTable>
                 </div>

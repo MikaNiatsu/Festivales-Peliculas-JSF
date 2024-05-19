@@ -29,6 +29,8 @@
                 <div class="control">
                     <p:selectOneMenu id="festival" value="#{otorgo.festival}">
                         <f:selectItems value="#{certamen.festivales}"/>
+                        <p:ajax event="change" update="certamen"/>
+                        <p:ajax event="change" update="premio"/>
                     </p:selectOneMenu>
                 </div>
             </div>
@@ -36,7 +38,7 @@
                 <label class="label has-text-black" for="certamen">Certamen</label>
                 <div class="control">
                     <p:selectOneMenu id="certamen" value="#{otorgo.certamen}">
-                        <f:selectItems value="#{certamen.ano_certamenes}"/>
+                        <f:selectItems value="#{certamen.get_Ano_certamenes(otorgo.festival)}"/>
                     </p:selectOneMenu>
                 </div>
             </div>
@@ -44,7 +46,7 @@
                 <label class="label has-text-black" for="premio">Premio</label>
                 <div class="control">
                     <p:selectOneMenu id="premio" value="#{otorgo.premio}">
-                        <f:selectItems value="#{premio.premios_st}"/>
+                        <f:selectItems value="#{festival_premio.get_prefio_festival(otorgo.festival)}"/>
                     </p:selectOneMenu>
                 </div>
             </div>

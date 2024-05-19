@@ -30,6 +30,7 @@
                 <div class="control">
                     <p:selectOneMenu id="cine" value="#{proyeccion.cine}">
                         <f:selectItems value="#{sala.cines}"/>
+                        <p:ajax event="change" update="sala"/>
                     </p:selectOneMenu>
                 </div>
             </div>
@@ -37,7 +38,7 @@
                 <label class="label has-text-black" for="sala">Sala</label>
                 <div class="control">
                     <p:selectOneMenu id="sala" value="#{proyeccion.sala}">
-                        <f:selectItems value="#{sala.salas_st}"/>
+                        <f:selectItems value="#{sala.getSalas_Cine(proyeccion.cine)}"/>
                     </p:selectOneMenu>
                 </div>
             </div>
@@ -59,24 +60,24 @@
             <div class="field">
                 <label class="label has-text-black" for="estreno">Dias de Estreno</label>
                 <div class="control">
-                    <p:inputNumber id="estreno" value="#{proyeccion.dias_estreno}" placeholder="Numero de Sala"
-                                   maxlength="3"
-                                   styleClass="input"/>
+                    <p:inputText id="estreno" value="#{proyeccion.dias_estreno}" placeholder="Dias EstrenoD"
+                                 maxlength="3"
+                                 styleClass="input" type="number"/>
                 </div>
             </div>
             <div class="field">
                 <label class="label has-text-black" for="especta">Espectadores</label>
                 <div class="control">
-                    <p:inputNumber id="especta" value="#{proyeccion.espectadores}" placeholder="Espectadores"
-                                   maxlength="6"
-                                   styleClass="input"/>
+                    <p:inputText id="especta" value="#{proyeccion.espectadores}" placeholder="Espectadores"
+                                 maxlength="6"
+                                 styleClass="input" type="number"/>
                 </div>
             </div>
             <div class="field">
                 <label class="label has-text-black" for="reca">Recaudacion</label>
                 <div class="control">
-                    <p:inputNumber id="reca" value="#{proyeccion.recaudacion}" placeholder="Recaudacion" maxlength="8"
-                                   styleClass="input"/>
+                    <p:inputText id="reca" value="#{proyeccion.recaudacion}" placeholder="Recaudacion" maxlength="8"
+                                 styleClass="input" type="number"/>
                 </div>
             </div>
             <div class="field is-grouped is-justify-content-center is-align-items-center">
@@ -151,29 +152,29 @@
                         <p:column headerText="Dias de Estreno">
                             <h:outputText value="#{pr.fecha_estreno}" styleClass="content"
                                           rendered="#{not proyeccion.esEditable}"/>
-                            <p:inputNumber value="#{pr.fecha_estreno}" maxlength="3"
-                                           rendered="#{proyeccion.esEditable}">
+                            <p:inputText value="#{pr.fecha_estreno}" maxlength="3"
+                                         rendered="#{proyeccion.esEditable}" type="number">
                                 <p:ajax event="change" listener="#{proyeccion.actualizar(pr)}" process="@this"
                                         update="@form"/>
-                            </p:inputNumber>
+                            </p:inputText>
                         </p:column>
                         <p:column headerText="Espectadores">
                             <h:outputText value="#{pr.espectadores}" styleClass="content"
                                           rendered="#{not proyeccion.esEditable}"/>
-                            <p:inputNumber value="#{pro.espectadores}" maxlength="6"
-                                           rendered="#{proyeccion.esEditable}">
+                            <p:inputText value="#{pro.espectadores}" maxlength="6"
+                                         rendered="#{proyeccion.esEditable}" type="number">
                                 <p:ajax event="change" listener="#{proyeccion.actualizar(pr)}" process="@this"
                                         update="@form"/>
-                            </p:inputNumber>
+                            </p:inputText>
                         </p:column>
                         <p:column headerText="Recaudacion">
                             <h:outputText value="#{pr.recaudacion}" styleClass="content"
                                           rendered="#{not proyeccion.esEditable}"/>
-                            <p:inputNumber value="#{pr.recaudacion}" maxlength="8"
-                                           rendered="#{proyeccion.esEditable}">
+                            <p:inputText value="#{pr.recaudacion}" maxlength="8"
+                                         rendered="#{proyeccion.esEditable}" type="number">
                                 <p:ajax event="change" listener="#{proyeccion.actualizar(pr)}" process="@this"
                                         update="@form"/>
-                            </p:inputNumber>
+                            </p:inputText>
                         </p:column>
                     </p:dataTable>
                 </div>

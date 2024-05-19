@@ -1,3 +1,5 @@
+package co.edu.unbosque.persistence;
+
 public class Cine {
     private String cine;
     private String ciudad_cine;
@@ -5,7 +7,7 @@ public class Cine {
 
     /**
      * Constructor de la clase Cine.
-     * 
+     *
      * @param cine           El nombre del cine.
      * @param ciudad_cine    La ciudad donde se encuentra el cine.
      * @param direccion_cine La dirección del cine.
@@ -18,7 +20,7 @@ public class Cine {
 
     /**
      * Obtiene el nombre del cine.
-     * 
+     *
      * @return El nombre del cine.
      */
     public String getCine() {
@@ -27,7 +29,7 @@ public class Cine {
 
     /**
      * Establece el nombre del cine.
-     * 
+     *
      * @param cine El nombre del cine.
      */
     public void setCine(String cine) {
@@ -36,7 +38,7 @@ public class Cine {
 
     /**
      * Obtiene la ciudad donde se encuentra el cine.
-     * 
+     *
      * @return La ciudad del cine.
      */
     public String getCiudad_cine() {
@@ -45,7 +47,7 @@ public class Cine {
 
     /**
      * Establece la ciudad donde se encuentra el cine.
-     * 
+     *
      * @param ciudad_cine La ciudad del cine.
      */
     public void setCiudad_cine(String ciudad_cine) {
@@ -54,7 +56,7 @@ public class Cine {
 
     /**
      * Obtiene la dirección del cine.
-     * 
+     *
      * @return La dirección del cine.
      */
     public String getDireccion_cine() {
@@ -63,7 +65,7 @@ public class Cine {
 
     /**
      * Establece la dirección del cine.
-     * 
+     *
      * @param direccion_cine La dirección del cine.
      */
     public void setDireccion_cine(String direccion_cine) {
