@@ -13,6 +13,7 @@
     <link href="styles/theme.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="styles/main.css" rel="stylesheet" type="text/css" media="all"/>
     <link rel="icon" type="image/x-icon" href="film_video_23252.ico"/>
+
 </h:head>
 <h:body>
     <div class="hero is-info">
@@ -22,23 +23,38 @@
     </div>
     <h:form>
         <div class="columns is-centered">
-            <div class="box has-background-black" style="max-width: 25%">
-                <p:galleria value="#{index.peliculas}" var="poster" numVisible="5"
-                            responsiveOptions="#{index.responsiveOptions1}"
-                            showCaption="true" style="max-width: 440px">
-                    <p:graphicImage value="#{index.obtener_poster(poster.cip, poster.titulo_p)}"
-                                    alt="#{poster.titulo_p}"
-                                    style="width: 65%; display: block;"/>
-                    <f:facet name="caption">
-                        <h4 class="mb-2">#{poster.titulo_p}</h4>
-                        <p>#{poster.ano_produccion}</p>
-                    </f:facet>
-                    <f:facet name="thumbnail">
+            <div class="column is-narrow">
+                <div class="box has-background-black" style="max-width: 500px; max-height: 600px">
+                    <p:galleria value="#{index.peliculas}" var="poster" numVisible="5"
+                                responsiveOptions="#{index.responsiveOptions1}"
+                                showCaption="true" style="max-width: 100%;" autoPlay="true">
                         <p:graphicImage value="#{index.obtener_poster(poster.cip, poster.titulo_p)}"
                                         alt="#{poster.titulo_p}"
-                                        style="display: block; width: 100px;"/>
-                    </f:facet>
-                </p:galleria>
+                                        style="width: 56%; display: block;"/>
+                        <f:facet name="caption">
+                            <div class="content">
+                                <h4 class="mb-2 has-text-white">#{poster.titulo_p}</h4>
+                                <p>#{poster.ano_produccion}</p>
+                            </div>
+                        </f:facet>
+                        <f:facet name="thumbnail">
+                            <p:graphicImage value="#{index.obtener_poster(poster.cip, poster.titulo_p)}"
+                                            alt="#{poster.titulo_p}"
+                                            style="display: block; width: 100px;"/>
+                        </f:facet>
+                    </p:galleria>
+                </div>
+            </div>
+            <div class="column is-narrow">
+                <article class="message is-link" style="max-width: 400px;">
+                    <div class="message-header">
+                        <p>Para que estes al dia</p>
+                    </div>
+                    <div class="message-body" id="messageBody">
+                        <h:outputText value="#{index.mensajeActual}" escape="false" id="mensaje"/>
+                    </div>
+                    <p:poll interval="7" update="mensaje" onstart="animateMessageChange()"/>
+                </article>
             </div>
         </div>
 
@@ -73,6 +89,11 @@
             </p>
         </div>
     </div>
-
+    <script>
+        function animateMessageChange() {
+            $('#messageBody').fadeOut(300);
+            $('#messageBody').fadeIn(300);
+        }
+    </script>
 </h:body>
 </html>

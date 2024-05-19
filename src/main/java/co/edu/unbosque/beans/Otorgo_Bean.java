@@ -82,8 +82,9 @@ public class Otorgo_Bean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("otorgo", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay premios para ese festival"));
             return;
         }
+        System.out.println(festival + " " + certamen + " " + cip + " " + premio);
         try {
-            Funciones_SQL.llamar_metodo(String.format("CALL crear_otorgo('%s', '%s', '%s', '%s');", festival, certamen, premio, cip));
+            Funciones_SQL.llamar_metodo(String.format("CALL crear_otorgo('%s', '%s', '%s', '%s');", festival, certamen, cip, premio));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage("otorgo", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al crear Otorgo"));
             e.printStackTrace();
