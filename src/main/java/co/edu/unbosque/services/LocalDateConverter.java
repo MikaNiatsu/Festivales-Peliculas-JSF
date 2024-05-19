@@ -9,11 +9,21 @@ import jakarta.faces.convert.FacesConverter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-
+/**
+ * El convertidor LocalDateConverter convierte entre LocalDate y String en el formato "yyyy-MM-dd".
+ */
 @FacesConverter("localDateConverter")
 public class LocalDateConverter implements Converter {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    /**
+     * Convierte un String en un objeto LocalDate.
+     *
+     * @param context   El contexto de Faces.
+     * @param component El componente de la interfaz de usuario.
+     * @param value     El valor a convertir.
+     * @return El objeto LocalDate.
+     */
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value == null || value.isEmpty()) {
@@ -28,6 +38,14 @@ public class LocalDateConverter implements Converter {
         }
     }
 
+    /**
+     * Convierte un objeto LocalDate en un String.
+     *
+     * @param context   El contexto de Faces.
+     * @param component El componente de la interfaz de usuario.
+     * @param value     El valor a convertir.
+     * @return El String representando la fecha.
+     */
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         if (value == null) {
