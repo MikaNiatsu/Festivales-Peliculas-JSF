@@ -9,12 +9,12 @@ import java.sql.Statement;
  * La clase Funciones_SQL proporciona métodos para ejecutar consultas SQL en la base de datos.
  */
 public class Funciones_SQL {
-    //private static final String URL = "jdbc:mysql://45.169.100.82:3306/nanotsky_sq_peliculas";
-    //private static final String USER = "nanotsky_peliculas";
-    //private static final String PASSWORD = "4c[jRSt9y~ak";
-    private static final String URL = "jdbc:mysql://192.168.56.127:3306/sq_peliculas";
-    private static final String USER = "remoto";
-    private static final String PASSWORD = "123456";
+    private static final String URL = "jdbc:mysql://45.169.100.82:3306/nanotsky_sq_peliculas";
+    private static final String USER = "nanotsky_peliculas";
+    private static final String PASSWORD = "4c[jRSt9y~ak";
+    // static final String URL = "jdbc:mysql://192.168.56.127:3306/sq_peliculas";
+    // private static final String USER = "remoto";
+    // private static final String PASSWORD = "123456";
     private static Connection con;
 
     /**
