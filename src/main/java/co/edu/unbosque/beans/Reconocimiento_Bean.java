@@ -95,6 +95,12 @@ public class Reconocimiento_Bean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("reconocimiento", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay premios para ese festival"));
             return;
         }
+        for (Reconocimiento r : reconocimientos) {
+            if (Integer.parseInt(r.getCertamen()) == anio && r.getFestival().equals(festival)) {
+                FacesContext.getCurrentInstance().addMessage("reconocimiento", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ya existe un reconocimiento para ese certamen y festival"));
+                return;
+            }
+        }
         try {
             Funciones_SQL.llamar_metodo(String.format("CALL crear_reconocimiento('%s', '%s', '%s', '%s');", festival, anio, premio, nombre));
         } catch (Exception e) {
